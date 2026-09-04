@@ -18,13 +18,20 @@ function LoginForm() {
     setPending(true);
     setError("");
     const form = new FormData(event.currentTarget);
-    const message = await login(String(form.get("email")), String(form.get("password")));
+    const result = await login(String(form.get("email")), String(form.get("password")));
     setPending(false);
-    if (message) {
-      setError(message);
+    if (result.error) {
+      setError(result.error);
       return;
     }
-    router.push(next);
+    const requested = searchParams.get("next");
+    const dest =
+      requested && requested !== "/favorites"
+        ? requested
+        : result.user?.role === "admin"
+          ? "/admin"
+          : "/favorites";
+    router.push(dest);
     router.refresh();
   }
 
@@ -46,6 +53,11 @@ function LoginForm() {
             Create an account
           </Link>
         </p>
+        {next.startsWith("/admin") ? (
+          <p className="mt-4 rounded-xl bg-ivory-dark px-3 py-3 text-xs leading-5 text-ink-soft">
+            Studio: <span className="text-ink">admin@aurelia.homes</span> / AureliaAdmin1!
+          </p>
+        ) : null}
         <form onSubmit={onSubmit} className="mt-8 space-y-4">
           <input
             name="email"

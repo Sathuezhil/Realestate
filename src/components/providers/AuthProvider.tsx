@@ -7,7 +7,7 @@ interface AuthContextValue {
   user: AuthUser | null;
   loading: boolean;
   refresh: () => Promise<void>;
-  login: (email: string, password: string) => Promise<string | null>;
+  login: (email: string, password: string) => Promise<{ error: string | null; user: AuthUser | null }>;
   register: (name: string, email: string, password: string) => Promise<string | null>;
   logout: () => Promise<void>;
   toggleFavorite: (propertyId: string) => Promise<{ saved: boolean } | { error: string }>;
@@ -44,9 +44,9 @@ export function AuthProvider({
       body: JSON.stringify({ email, password }),
     });
     const data = (await response.json()) as { user?: AuthUser; error?: string };
-    if (!response.ok) return data.error ?? "Could not log in.";
+    if (!response.ok) return { error: data.error ?? "Could not log in.", user: null };
     setUser(data.user ?? null);
-    return null;
+    return { error: null, user: data.user ?? null };
   }, []);
 
   const register = useCallback(async (name: string, email: string, password: string) => {

@@ -71,6 +71,14 @@ export function Header() {
           >
             <Heart className="h-4 w-4" />
           </Link>
+          {user?.role === "admin" ? (
+            <Link
+              href="/admin"
+              className="rounded-full border border-gold px-3 py-2 text-xs uppercase tracking-[0.14em] text-gold-hover"
+            >
+              Studio
+            </Link>
+          ) : null}
           {user ? (
             <div className="flex items-center gap-2">
               <span className="max-w-[10rem] truncate text-sm text-ink-soft">{user.name}</span>
@@ -116,6 +124,11 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
+            {user?.role === "admin" ? (
+              <Link href="/admin" onClick={() => setOpen(false)} className="text-sm text-ink">
+                Studio
+              </Link>
+            ) : null}
             <Link href="/favorites" onClick={() => setOpen(false)} className="text-sm text-ink">
               Favorites
             </Link>

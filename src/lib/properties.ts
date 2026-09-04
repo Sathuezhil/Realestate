@@ -1,6 +1,10 @@
-import { seedProperties } from "@/data/properties";
+import { featuredPropertyIds } from "@/data/properties";
 import { connectDB, isMongoReady } from "@/lib/db";
 import { PropertyModel } from "@/models/Property";
+import {
+  getStoredPropertyById,
+  listStoredProperties,
+} from "@/lib/store";
 import { type Property, type PropertyFilters } from "@/types";
 
 function applyFilters(properties: Property[], filters: PropertyFilters): Property[] {
@@ -134,7 +138,7 @@ export async function listProperties(filters: PropertyFilters = {}): Promise<Pro
     }
   }
 
-  return applyFilters(seedProperties, filters);
+  return applyFilters(await listStoredProperties(), filters);
 }
 
 export async function getPropertyById(id: string): Promise<Property | null> {
@@ -143,15 +147,10 @@ export async function getPropertyById(id: string): Promise<Property | null> {
     const doc = await PropertyModel.findById(id).lean().catch(() => null);
     if (doc) return fromMongoDoc(doc);
   }
-  return seedProperties.find((property) => property.id === id) ?? null;
+  return getStoredPropertyById(id);
 }
 
 export async function getFeaturedProperties(): Promise<Property[]> {
-  const { featuredPropertyIds } = await import("@/data/properties");
-  const featured = featuredPropertyIds
-    .map((id) => seedProperties.find((property) => property.id === id))
-    .filter((property): property is Property => Boolean(property && property.status === "available"));
-
   await connectDB();
   if (isMongoReady()) {
     const count = await PropertyModel.countDocuments({ status: "available" });
@@ -161,7 +160,12 @@ export async function getFeaturedProperties(): Promise<Property[]> {
     }
   }
 
-  return featured;
+  const stored = await listStoredProperties();
+  const featured = featuredPropertyIds
+    .map((id) => stored.find((property) => property.id === id))
+    .filter((property): property is Property => Boolean(property && property.status === "available"));
+  if (featured.length > 0) return featured;
+  return stored.filter((property) => property.status === "available").slice(0, 6);
 }
 
 export async function getPropertiesByIds(ids: string[]): Promise<Property[]> {

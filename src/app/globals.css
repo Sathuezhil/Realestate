@@ -23,6 +23,7 @@ html {
 
 html,
 body {
+  min-height: 100%;
   background: var(--color-ivory);
   color: var(--color-ink);
 }
@@ -36,6 +37,110 @@ body {
   body {
     padding-bottom: 0;
   }
+}
+
+body:has(.admin-app) {
+  padding-bottom: 0;
+  background: var(--color-ivory);
+}
+
+.admin-app {
+  min-height: 100%;
+}
+
+.admin-top-strip {
+  background: var(--color-ink);
+  color: var(--color-ivory);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.admin-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: rgba(246, 241, 232, 0.88);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.admin-stat {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease;
+}
+
+.admin-stat:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 40px rgba(28, 25, 22, 0.08);
+}
+
+.admin-stat::after {
+  content: "";
+  position: absolute;
+  right: -20px;
+  top: -20px;
+  width: 90px;
+  height: 90px;
+  border-radius: 999px;
+  background: rgba(196, 165, 116, 0.14);
+}
+
+.admin-status {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.admin-status-available {
+  background: rgba(196, 165, 116, 0.18);
+  color: #8a6a3a;
+}
+
+.admin-status-sold {
+  background: rgba(28, 25, 22, 0.08);
+  color: var(--color-ink);
+}
+
+.admin-status-rented {
+  background: rgba(37, 211, 102, 0.12);
+  color: #146c3a;
+}
+
+.admin-status-new {
+  background: rgba(196, 165, 116, 0.2);
+  color: #8a6a3a;
+}
+
+.admin-status-contacted {
+  background: rgba(37, 211, 102, 0.12);
+  color: #146c3a;
+}
+
+.admin-status-closed {
+  background: rgba(28, 25, 22, 0.08);
+  color: var(--color-muted);
+}
+
+.admin-bar {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(28, 25, 22, 0.08);
+}
+
+.admin-bar > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #c4a574;
 }
 
 .font-serif {
@@ -70,11 +175,9 @@ body {
 @keyframes page-in {
   from {
     opacity: 0;
-    transform: translateY(18px);
   }
   to {
     opacity: 1;
-    transform: none;
   }
 }
 

@@ -1,6 +1,3 @@
-import { Footer } from "@/components/layout/Footer";
-import { Header } from "@/components/layout/Header";
-import { FloatingLeadBar, TopBanner } from "@/components/leads/LeadActions";
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { getCurrentUser } from "@/lib/auth";
 import type { Metadata } from "next";
@@ -31,16 +28,10 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${outfit.variable} ${playfair.variable} h-full antialiased`}
+      className={`${outfit.variable} ${playfair.variable} min-h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-ivory text-ink">
-        <AuthProvider initialUser={user}>
-          <TopBanner />
-          <Header />
-          <main className="flex-1">{children}</main>
-          <Footer />
-          <FloatingLeadBar />
-        </AuthProvider>
+        <AuthProvider initialUser={user}>{children}</AuthProvider>
       </body>
     </html>
   );

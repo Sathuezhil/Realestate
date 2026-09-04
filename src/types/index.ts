@@ -55,6 +55,8 @@ export interface AuthUser {
   favoriteIds: string[];
 }
 
+export type EnquiryStatus = "new" | "contacted" | "closed";
+
 export interface Enquiry {
   id: string;
   propertyId?: string;
@@ -63,5 +65,8 @@ export interface Enquiry {
   phone: string;
   message: string;
   source: "property" | "contact";
+  status: EnquiryStatus;
   createdAt: string;
 }
+
+export type PropertyInput = Omit<Property, "id" | "createdAt">;

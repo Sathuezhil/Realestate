@@ -60,3 +60,10 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
     favoriteIds: user.favoriteIds,
   };
 }
+
+export async function requireAdmin() {
+  const user = await getCurrentUser();
+  if (!user) return { user: null, error: "Unauthorized", status: 401 as const };
+  if (user.role !== "admin") return { user, error: "Forbidden", status: 403 as const };
+  return { user, error: null, status: 200 as const };
+}
