@@ -21,17 +21,17 @@ export default function ContactPage() {
           <EnquiryForm source="contact" />
         </div>
         <div className="space-y-6">
-          <div className="rounded-2xl bg-ink p-8 text-ivory">
+          <div className="rounded-2xl border border-line bg-ivory-dark p-8 text-ink">
             <p className="font-serif text-3xl">Aurelia studio</p>
-            <p className="mt-4 inline-flex items-start gap-3 text-sm text-ivory/80">
+            <p className="mt-4 inline-flex items-start gap-3 text-sm text-ink-soft">
               <MapPin className="mt-0.5 h-4 w-4" />
               Office 1204, Boulevard Plaza, Downtown Dubai
             </p>
-            <p className="mt-3 inline-flex items-center gap-3 text-sm text-ivory/80">
+            <p className="mt-3 inline-flex items-center gap-3 text-sm text-ink-soft">
               <Phone className="h-4 w-4" />
               +971 4 450 1200
             </p>
-            <p className="mt-3 inline-flex items-center gap-3 text-sm text-ivory/80">
+            <p className="mt-3 inline-flex items-center gap-3 text-sm text-ink-soft">
               <Mail className="h-4 w-4" />
               hello@aurelia.homes
             </p>

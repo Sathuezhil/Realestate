@@ -37,17 +37,17 @@ export function LeadStrip() {
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-      <div className="cta-panel overflow-hidden rounded-3xl bg-ink px-6 py-12 text-ivory md:px-14">
+      <div className="cta-panel overflow-hidden rounded-3xl border border-line bg-ivory-dark px-6 py-12 text-ink md:px-14">
         <p className="relative text-xs uppercase tracking-[0.22em] text-gold">Complimentary shortlist</p>
         <h2 className="relative mt-3 max-w-2xl font-serif text-4xl md:text-5xl">
           Tell us the community. We send three homes today.
         </h2>
-        <p className="relative mt-4 max-w-xl text-ivory/70">
+        <p className="relative mt-4 max-w-xl text-ink-soft">
           No mailing list. A specialist replies on WhatsApp or email with a private shortlist.
         </p>
 
         {status === "sent" ? (
-          <p className="relative mt-8 max-w-md text-sm leading-7 text-ivory/85">
+          <p className="relative mt-8 max-w-md text-sm leading-7 text-ink-soft">
             Received. You will have a shortlist within the day — or WhatsApp us if you want it faster.
           </p>
         ) : (
@@ -56,24 +56,24 @@ export function LeadStrip() {
               name="name"
               required
               placeholder="Name"
-              className="rounded-xl border border-white/15 bg-white/5 px-3 py-3 text-sm outline-none placeholder:text-ivory/40 focus:border-gold"
+              className="rounded-xl border border-line bg-ivory px-3 py-3 text-sm outline-none placeholder:text-muted focus:border-gold"
             />
             <input
               name="phone"
               required
               placeholder="Mobile / WhatsApp"
-              className="rounded-xl border border-white/15 bg-white/5 px-3 py-3 text-sm outline-none placeholder:text-ivory/40 focus:border-gold"
+              className="rounded-xl border border-line bg-ivory px-3 py-3 text-sm outline-none placeholder:text-muted focus:border-gold"
             />
             <input
               name="email"
               type="email"
               required
               placeholder="Email"
-              className="rounded-xl border border-white/15 bg-white/5 px-3 py-3 text-sm outline-none placeholder:text-ivory/40 focus:border-gold"
+              className="rounded-xl border border-line bg-ivory px-3 py-3 text-sm outline-none placeholder:text-muted focus:border-gold"
             />
             <select
               name="community"
-              className="rounded-xl border border-white/15 bg-ink px-3 py-3 text-sm outline-none focus:border-gold"
+              className="rounded-xl border border-line bg-ivory px-3 py-3 text-sm outline-none focus:border-gold"
               defaultValue="Palm Jumeirah"
             >
               <option>Palm Jumeirah</option>

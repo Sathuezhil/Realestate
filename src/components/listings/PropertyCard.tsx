@@ -63,7 +63,7 @@ export function PropertyCard({ property }: { property: Property }) {
           >
             <Heart className={`h-4 w-4 ${saved ? "heart-pop fill-gold text-gold" : ""}`} />
           </button>
-          <div className="absolute inset-x-0 bottom-0 translate-y-3 bg-gradient-to-t from-ink/85 to-transparent px-4 pb-4 pt-10 text-sm text-ivory opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="absolute inset-x-0 bottom-0 translate-y-3 bg-gradient-to-t from-black/85 to-transparent px-4 pb-4 pt-10 text-sm text-white opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
             Book a private viewing →
           </div>
         </div>

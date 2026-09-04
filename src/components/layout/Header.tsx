@@ -1,9 +1,10 @@
 "use client";
 
 import { useAuth } from "@/components/providers/AuthProvider";
+import { useTheme } from "@/components/providers/ThemeProvider";
 import { cn } from "@/lib/utils";
 import { whatsappHref } from "@/lib/contact";
-import { Heart, Menu, MessageCircle, UserRound, X } from "lucide-react";
+import { Heart, Menu, MessageCircle, Moon, Sun, UserRound, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -18,6 +19,7 @@ const links = [
 export function Header() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
@@ -64,6 +66,14 @@ export function Header() {
             <MessageCircle className="h-3.5 w-3.5" />
             WhatsApp
           </a>
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line text-ink transition hover:border-gold hover:text-gold-hover"
+            aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+          >
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
           <Link
             href="/favorites"
             className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line text-ink transition hover:border-gold hover:text-gold-hover hover:scale-105"
@@ -71,14 +81,6 @@ export function Header() {
           >
             <Heart className="h-4 w-4" />
           </Link>
-          {user?.role === "admin" ? (
-            <Link
-              href="/admin"
-              className="rounded-full border border-gold px-3 py-2 text-xs uppercase tracking-[0.14em] text-gold-hover"
-            >
-              Studio
-            </Link>
-          ) : null}
           {user ? (
             <div className="flex items-center gap-2">
               <span className="max-w-[10rem] truncate text-sm text-ink-soft">{user.name}</span>
@@ -101,14 +103,24 @@ export function Header() {
           )}
         </div>
 
-        <button
-          type="button"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line md:hidden"
-          onClick={() => setOpen((value) => !value)}
-          aria-label="Menu"
-        >
-          {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line text-ink"
+            aria-label={theme === "dark" ? "Switch to light theme" : "Switch to dark theme"}
+          >
+            {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-line"
+            onClick={() => setOpen((value) => !value)}
+            aria-label="Menu"
+          >
+            {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
+        </div>
       </div>
 
       {open ? (
@@ -124,17 +136,22 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
-            {user?.role === "admin" ? (
-              <Link href="/admin" onClick={() => setOpen(false)} className="text-sm text-ink">
-                Studio
-              </Link>
-            ) : null}
             <Link href="/favorites" onClick={() => setOpen(false)} className="text-sm text-ink">
               Favorites
             </Link>
             <a href={whatsappHref()} onClick={() => setOpen(false)} className="text-sm text-ink">
               WhatsApp a specialist
             </a>
+            <button
+              type="button"
+              onClick={() => {
+                toggleTheme();
+                setOpen(false);
+              }}
+              className="text-left text-sm text-ink"
+            >
+              {theme === "dark" ? "Light theme" : "Dark theme"}
+            </button>
             {user ? (
               <button
                 type="button"

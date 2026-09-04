@@ -1,6 +1,8 @@
 import { AuthProvider } from "@/components/providers/AuthProvider";
 import { getCurrentUser } from "@/lib/auth";
-import type { Metadata } from "next";
+import { parseTheme, THEME_KEY } from "@/lib/theme";
+import type { Metadata, Viewport } from "next";
+import { cookies } from "next/headers";
 import { Outfit, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
@@ -23,12 +25,19 @@ export const metadata: Metadata = {
     "Private Dubai homes — Palm Jumeirah, Downtown, Marina, and gated communities. Book a viewing today.",
 };
 
+export const viewport: Viewport = {
+  colorScheme: "light",
+  themeColor: "#f6f1e8",
+};
+
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const user = await getCurrentUser();
+  const [user, cookieStore] = await Promise.all([getCurrentUser(), cookies()]);
+  const theme = parseTheme(cookieStore.get(THEME_KEY)?.value);
   return (
     <html
       lang="en"
-      className={`${outfit.variable} ${playfair.variable} min-h-full antialiased`}
+      suppressHydrationWarning
+      className={`${outfit.variable} ${playfair.variable} min-h-full antialiased${theme === "dark" ? " site-dark" : ""}`}
     >
       <body className="flex min-h-full flex-col bg-ivory text-ink">
         <AuthProvider initialUser={user}>{children}</AuthProvider>

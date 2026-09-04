@@ -3,15 +3,19 @@
 import { useAuth } from "@/components/providers/AuthProvider";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 function LoginForm() {
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") || "/favorites";
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
+
+  useEffect(() => {
+    if (user?.role === "admin") router.replace("/admin");
+  }, [user, router]);
 
   async function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -53,11 +57,6 @@ function LoginForm() {
             Create an account
           </Link>
         </p>
-        {next.startsWith("/admin") ? (
-          <p className="mt-4 rounded-xl bg-ivory-dark px-3 py-3 text-xs leading-5 text-ink-soft">
-            Studio: <span className="text-ink">admin@aurelia.homes</span> / AureliaAdmin1!
-          </p>
-        ) : null}
         <form onSubmit={onSubmit} className="mt-8 space-y-4">
           <input
             name="email"

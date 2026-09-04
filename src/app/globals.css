@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@theme inline {
+@theme {
   --color-ivory: #f6f1e8;
   --color-ivory-dark: #ebe4d6;
   --color-ink: #1c1916;
@@ -15,6 +15,7 @@
 
 html {
   scroll-behavior: smooth;
+  color-scheme: light;
 }
 
 @view-transition {
@@ -26,6 +27,32 @@ body {
   min-height: 100%;
   background: var(--color-ivory);
   color: var(--color-ink);
+}
+
+.site-app {
+  background: var(--color-ivory);
+  color: var(--color-ink);
+}
+
+html.site-dark .site-app {
+  color-scheme: dark;
+  --color-ivory: #14110f;
+  --color-ivory-dark: #1c1814;
+  --color-ink: #f4eee6;
+  --color-ink-soft: #d4cbc0;
+  --color-muted: #a3988c;
+  --color-line: #3a332c;
+  background: var(--color-ivory);
+  color: var(--color-ink);
+}
+
+html.site-dark .site-app .bg-white {
+  background-color: #1f1b17;
+}
+
+html.site-dark body:has(.site-app) {
+  background: #14110f;
+  color: #f4eee6;
 }
 
 body {

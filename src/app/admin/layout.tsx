@@ -1,10 +1,15 @@
 import { AdminShell } from "@/components/admin/AdminShell";
 import { getCurrentUser } from "@/lib/auth";
 import { listEnquiries } from "@/lib/store";
-import { type Metadata } from "next";
+import { type Metadata, type Viewport } from "next";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = { title: "Studio" };
+
+export const viewport: Viewport = {
+  colorScheme: "light",
+  themeColor: "#f6f1e8",
+};
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const user = await getCurrentUser();

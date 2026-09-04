@@ -14,10 +14,10 @@ export default function AboutPage() {
               "url(https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=80)",
           }}
         />
-        <div className="absolute inset-0 bg-ink/60" />
+        <div className="absolute inset-0 bg-black/60" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="text-xs uppercase tracking-[0.24em] text-gold">Our story</p>
-          <h1 className="mt-4 max-w-3xl font-serif text-5xl text-ivory md:text-6xl">
+          <h1 className="mt-4 max-w-3xl font-serif text-5xl text-white md:text-6xl">
             A quieter way to find a <span className="gold-shimmer">home</span>.
           </h1>
         </div>

@@ -50,22 +50,22 @@ export function ImageGallery({ images, title }: { images: string[]; title: strin
       </div>
 
       {open ? (
-        <div className="lightbox-in fixed inset-0 z-50 flex items-center justify-center bg-ink/90 p-4">
+        <div className="lightbox-in fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4">
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="absolute right-5 top-5 text-ivory"
+            className="absolute right-5 top-5 text-white"
             aria-label="Close"
           >
             <X className="h-6 w-6" />
           </button>
-          <button type="button" onClick={prev} className="absolute left-4 text-ivory" aria-label="Previous">
+          <button type="button" onClick={prev} className="absolute left-4 text-white" aria-label="Previous">
             <ChevronLeft className="h-8 w-8" />
           </button>
           <div className="relative h-[80vh] w-full max-w-5xl">
             <Image key={current} src={current} alt={title} fill className="object-contain" sizes="100vw" />
           </div>
-          <button type="button" onClick={next} className="absolute right-4 text-ivory" aria-label="Next">
+          <button type="button" onClick={next} className="absolute right-4 text-white" aria-label="Next">
             <ChevronRight className="h-8 w-8" />
           </button>
         </div>
