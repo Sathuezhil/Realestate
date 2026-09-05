@@ -48,17 +48,22 @@ export async function getTokenPayload() {
 }
 
 export async function getCurrentUser(): Promise<AuthUser | null> {
-  const payload = await getTokenPayload();
-  if (!payload?.sub) return null;
-  const user = await findUserById(String(payload.sub));
-  if (!user) return null;
-  return {
-    id: user.id,
-    name: user.name,
-    email: user.email,
-    role: user.role,
-    favoriteIds: user.favoriteIds,
-  };
+  try {
+    const payload = await getTokenPayload();
+    if (!payload?.sub) return null;
+    const user = await findUserById(String(payload.sub));
+    if (!user) return null;
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      favoriteIds: user.favoriteIds,
+    };
+  } catch (error) {
+    console.error("getCurrentUser failed", error);
+    return null;
+  }
 }
 
 export async function requireAdmin() {

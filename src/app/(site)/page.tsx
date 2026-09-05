@@ -7,6 +7,7 @@ import { Testimonials } from "@/components/home/Testimonials";
 import { PropertyCard } from "@/components/listings/PropertyCard";
 import { Reveal } from "@/components/motion/Reveal";
 import { getFeaturedProperties } from "@/lib/properties";
+import { seedProperties } from "@/data/properties";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
@@ -20,7 +21,12 @@ const cities = [
 ];
 
 export default async function HomePage() {
-  const featured = await getFeaturedProperties();
+  let featured = seedProperties.filter((property) => property.status === "available").slice(0, 6);
+  try {
+    featured = await getFeaturedProperties();
+  } catch (error) {
+    console.error("HomePage featured listings failed", error);
+  }
 
   return (
     <div>

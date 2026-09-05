@@ -169,49 +169,60 @@ export async function ensureSeed() {
 }
 
 async function runSeed() {
-  await connectDB();
+  try {
+    await connectDB();
 
-  if (isMongoReady()) {
-    const propertyCount = await PropertyModel.countDocuments();
-    if (propertyCount === 0) {
-      await PropertyModel.insertMany(
-        seedProperties.map(({ id: _id, createdAt, ...rest }) => ({
-          ...rest,
-          createdAt: new Date(createdAt),
-        })),
-      );
+    if (isMongoReady()) {
+      const propertyCount = await PropertyModel.countDocuments();
+      if (propertyCount === 0) {
+        await PropertyModel.insertMany(
+          seedProperties.map(({ id: _id, createdAt, ...rest }) => ({
+            ...rest,
+            createdAt: new Date(createdAt),
+          })),
+        );
+      }
+      const admin = await UserModel.findOne({ email: ADMIN_EMAIL });
+      if (!admin) {
+        await UserModel.create({
+          name: ADMIN_NAME,
+          email: ADMIN_EMAIL,
+          passwordHash: await bcrypt.hash(ADMIN_PASSWORD, 10),
+          role: "admin",
+          favoriteIds: [],
+        });
+      }
+      return;
     }
-    const admin = await UserModel.findOne({ email: ADMIN_EMAIL });
-    if (!admin) {
-      await UserModel.create({
+
+    const store = await readStore();
+    let changed = false;
+    if (store.properties.length === 0) {
+      store.properties = seedProperties;
+      changed = true;
+    }
+    if (!store.users.some((user) => user.role === "admin" || user.email === ADMIN_EMAIL)) {
+      store.users.push({
+        id: "u_admin",
         name: ADMIN_NAME,
         email: ADMIN_EMAIL,
         passwordHash: await bcrypt.hash(ADMIN_PASSWORD, 10),
         role: "admin",
         favoriteIds: [],
       });
+      changed = true;
     }
-    return;
+    if (changed) await writeStore(store);
+  } catch (error) {
+    console.error("runSeed failed", error);
+    if (!memoryStore) {
+      memoryStore = {
+        users: [],
+        enquiries: [],
+        properties: seedProperties,
+      };
+    }
   }
-
-  const store = await readStore();
-  let changed = false;
-  if (store.properties.length === 0) {
-    store.properties = seedProperties;
-    changed = true;
-  }
-  if (!store.users.some((user) => user.role === "admin" || user.email === ADMIN_EMAIL)) {
-    store.users.push({
-      id: "u_admin",
-      name: ADMIN_NAME,
-      email: ADMIN_EMAIL,
-      passwordHash: await bcrypt.hash(ADMIN_PASSWORD, 10),
-      role: "admin",
-      favoriteIds: [],
-    });
-    changed = true;
-  }
-  if (changed) await writeStore(store);
 }
 
 export async function createUser(input: {

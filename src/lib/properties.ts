@@ -1,4 +1,4 @@
-import { featuredPropertyIds } from "@/data/properties";
+import { featuredPropertyIds, seedProperties } from "@/data/properties";
 import { connectDB, isMongoReady } from "@/lib/db";
 import { PropertyModel } from "@/models/Property";
 import {
@@ -95,77 +95,100 @@ function fromMongoDoc(doc: {
   };
 }
 
+function featuredFrom(list: Property[]): Property[] {
+  const featured = featuredPropertyIds
+    .map((id) => list.find((property) => property.id === id))
+    .filter((property): property is Property => Boolean(property && property.status === "available"));
+  if (featured.length > 0) return featured;
+  return list.filter((property) => property.status === "available").slice(0, 6);
+}
+
 export async function listProperties(filters: PropertyFilters = {}): Promise<Property[]> {
-  await connectDB();
-  if (isMongoReady()) {
-    const count = await PropertyModel.countDocuments();
-    if (count > 0) {
-      const query: Record<string, unknown> = { status: "available" };
-      if (filters.q) {
-        query.$or = [
-          { title: { $regex: filters.q, $options: "i" } },
-          { description: { $regex: filters.q, $options: "i" } },
-          { "location.area": { $regex: filters.q, $options: "i" } },
-          { "location.city": { $regex: filters.q, $options: "i" } },
-          { "location.address": { $regex: filters.q, $options: "i" } },
-        ];
-      }
-      if (filters.minPrice != null || filters.maxPrice != null) {
-        query.price = {
-          ...(filters.minPrice != null ? { $gte: filters.minPrice } : {}),
-          ...(filters.maxPrice != null ? { $lte: filters.maxPrice } : {}),
-        };
-      }
-      if (filters.propertyType) query.propertyType = filters.propertyType;
-      if (filters.bedrooms != null) query.bedrooms = { $gte: filters.bedrooms };
-      if (filters.minArea != null || filters.maxArea != null) {
-        query.areaSqft = {
-          ...(filters.minArea != null ? { $gte: filters.minArea } : {}),
-          ...(filters.maxArea != null ? { $lte: filters.maxArea } : {}),
-        };
-      }
-      if (filters.furnished != null) query.furnished = filters.furnished;
+  try {
+    await connectDB();
+    if (isMongoReady()) {
+      const count = await PropertyModel.countDocuments();
+      if (count > 0) {
+        const query: Record<string, unknown> = { status: "available" };
+        if (filters.q) {
+          query.$or = [
+            { title: { $regex: filters.q, $options: "i" } },
+            { description: { $regex: filters.q, $options: "i" } },
+            { "location.area": { $regex: filters.q, $options: "i" } },
+            { "location.city": { $regex: filters.q, $options: "i" } },
+            { "location.address": { $regex: filters.q, $options: "i" } },
+          ];
+        }
+        if (filters.minPrice != null || filters.maxPrice != null) {
+          query.price = {
+            ...(filters.minPrice != null ? { $gte: filters.minPrice } : {}),
+            ...(filters.maxPrice != null ? { $lte: filters.maxPrice } : {}),
+          };
+        }
+        if (filters.propertyType) query.propertyType = filters.propertyType;
+        if (filters.bedrooms != null) query.bedrooms = { $gte: filters.bedrooms };
+        if (filters.minArea != null || filters.maxArea != null) {
+          query.areaSqft = {
+            ...(filters.minArea != null ? { $gte: filters.minArea } : {}),
+            ...(filters.maxArea != null ? { $lte: filters.maxArea } : {}),
+          };
+        }
+        if (filters.furnished != null) query.furnished = filters.furnished;
 
-      const sort: Record<string, 1 | -1> =
-        filters.sort === "price-asc"
-          ? { price: 1 }
-          : filters.sort === "price-desc"
-            ? { price: -1 }
-            : { createdAt: -1 };
+        const sort: Record<string, 1 | -1> =
+          filters.sort === "price-asc"
+            ? { price: 1 }
+            : filters.sort === "price-desc"
+              ? { price: -1 }
+              : { createdAt: -1 };
 
-      const docs = await PropertyModel.find(query).sort(sort).lean();
-      return docs.map(fromMongoDoc);
+        const docs = await PropertyModel.find(query).sort(sort).lean();
+        return docs.map(fromMongoDoc);
+      }
     }
-  }
 
-  return applyFilters(await listStoredProperties(), filters);
+    return applyFilters(await listStoredProperties(), filters);
+  } catch (error) {
+    console.error("listProperties failed", error);
+    return applyFilters(seedProperties, filters);
+  }
 }
 
 export async function getPropertyById(id: string): Promise<Property | null> {
-  await connectDB();
-  if (isMongoReady()) {
-    const doc = await PropertyModel.findById(id).lean().catch(() => null);
-    if (doc) return fromMongoDoc(doc);
+  try {
+    await connectDB();
+    if (isMongoReady()) {
+      const doc = await PropertyModel.findById(id).lean().catch(() => null);
+      if (doc) return fromMongoDoc(doc);
+    }
+    const stored = await getStoredPropertyById(id);
+    if (stored) return stored;
+  } catch (error) {
+    console.error("getPropertyById failed", error);
   }
-  return getStoredPropertyById(id);
+  return seedProperties.find((property) => property.id === id) ?? null;
 }
 
 export async function getFeaturedProperties(): Promise<Property[]> {
-  await connectDB();
-  if (isMongoReady()) {
-    const count = await PropertyModel.countDocuments({ status: "available" });
-    if (count > 0) {
+  try {
+    await connectDB();
+    if (isMongoReady()) {
       const docs = await PropertyModel.find({ status: "available" }).sort({ createdAt: -1 }).limit(6).lean();
-      return docs.map(fromMongoDoc);
+      if (docs.length > 0) return docs.map(fromMongoDoc);
     }
+  } catch (error) {
+    console.error("getFeaturedProperties mongo failed", error);
   }
 
-  const stored = await listStoredProperties();
-  const featured = featuredPropertyIds
-    .map((id) => stored.find((property) => property.id === id))
-    .filter((property): property is Property => Boolean(property && property.status === "available"));
-  if (featured.length > 0) return featured;
-  return stored.filter((property) => property.status === "available").slice(0, 6);
+  try {
+    const stored = await listStoredProperties();
+    const featured = featuredFrom(stored);
+    if (featured.length > 0) return featured;
+  } catch (error) {
+    console.error("getFeaturedProperties store failed", error);
+  }
+
+  return featuredFrom(seedProperties);
 }
 
 export async function getPropertiesByIds(ids: string[]): Promise<Property[]> {

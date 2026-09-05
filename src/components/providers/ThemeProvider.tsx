@@ -1,7 +1,7 @@
 "use client";
 
-import { readStoredTheme, THEME_KEY, type Theme } from "@/lib/theme";
-import { createContext, useCallback, useContext, useLayoutEffect, useMemo, useState } from "react";
+import { THEME_KEY, type Theme } from "@/lib/theme";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 interface ThemeContextValue {
   theme: Theme;
@@ -25,15 +25,9 @@ export function ThemeProvider({
 }) {
   const [theme, setTheme] = useState<Theme>(initialTheme);
 
-  useLayoutEffect(() => {
-    const cookie = readStoredTheme(
-      document.cookie.match(new RegExp(`(?:^|; )${THEME_KEY}=(dark|light)`))?.[1],
-    );
-    const local = readStoredTheme(window.localStorage.getItem(THEME_KEY));
-    const next = cookie ?? local ?? initialTheme;
-    if (next !== initialTheme) setTheme(next);
-    persistTheme(next);
-  }, [initialTheme]);
+  useEffect(() => {
+    persistTheme(theme);
+  }, [theme]);
 
   const toggleTheme = useCallback(() => {
     setTheme((current) => {
