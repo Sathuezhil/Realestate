@@ -26,8 +26,18 @@ export async function connectDB() {
   if (!MONGODB_URI) return null;
   if (cache.conn) return cache.conn;
   if (!cache.promise) {
-    cache.promise = mongoose.connect(MONGODB_URI, { bufferCommands: false });
+    cache.promise = mongoose.connect(MONGODB_URI, {
+      bufferCommands: false,
+      serverSelectionTimeoutMS: 5000,
+    });
   }
-  cache.conn = await cache.promise;
-  return cache.conn;
+  try {
+    cache.conn = await cache.promise;
+    return cache.conn;
+  } catch (error) {
+    cache.promise = null;
+    cache.conn = null;
+    console.error("MongoDB connection failed; falling back to local store.", error);
+    return null;
+  }
 }

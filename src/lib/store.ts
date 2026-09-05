@@ -35,7 +35,23 @@ const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || "admin@aurelia.homes").toLowerCa
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "AureliaAdmin1!";
 const ADMIN_NAME = process.env.ADMIN_NAME || "Aurelia Studio";
 
+let memoryStore: LocalStore | null = null;
+
 const emptyStore = (): LocalStore => ({ users: [], enquiries: [], properties: [] });
+
+function cloneStore(store: LocalStore): LocalStore {
+  return {
+    users: store.users.map((user) => ({ ...user, favoriteIds: [...user.favoriteIds] })),
+    enquiries: store.enquiries.map((enquiry) => ({ ...enquiry })),
+    properties: store.properties.map((property) => ({
+      ...property,
+      images: [...property.images],
+      amenities: [...property.amenities],
+      location: { ...property.location },
+      agent: { ...property.agent },
+    })),
+  };
+}
 
 function normalizeEnquiry(enquiry: Enquiry): Enquiry {
   return {
@@ -45,22 +61,30 @@ function normalizeEnquiry(enquiry: Enquiry): Enquiry {
 }
 
 async function readStore(): Promise<LocalStore> {
+  if (memoryStore) return cloneStore(memoryStore);
   try {
     const raw = await fs.readFile(STORE_PATH, "utf8");
     const parsed = JSON.parse(raw) as Partial<LocalStore>;
-    return {
+    const store: LocalStore = {
       users: parsed.users ?? [],
       enquiries: (parsed.enquiries ?? []).map(normalizeEnquiry),
       properties: parsed.properties ?? [],
     };
+    memoryStore = cloneStore(store);
+    return store;
   } catch {
     return emptyStore();
   }
 }
 
 async function writeStore(store: LocalStore) {
-  await fs.mkdir(path.dirname(STORE_PATH), { recursive: true });
-  await fs.writeFile(STORE_PATH, JSON.stringify(store, null, 2), "utf8");
+  memoryStore = cloneStore(store);
+  try {
+    await fs.mkdir(path.dirname(STORE_PATH), { recursive: true });
+    await fs.writeFile(STORE_PATH, JSON.stringify(store, null, 2), "utf8");
+  } catch {
+    // Netlify / serverless filesystems are read-only — keep the in-memory copy.
+  }
 }
 
 function publicUser(user: StoredUser): AuthUser {
@@ -355,7 +379,7 @@ export async function listStoredProperties(): Promise<Property[]> {
     if (docs.length > 0) return docs.map(fromMongoProperty);
   }
   const store = await readStore();
-  return store.properties;
+  return store.properties.length > 0 ? store.properties : seedProperties;
 }
 
 export async function getStoredPropertyById(id: string): Promise<Property | null> {
@@ -366,7 +390,9 @@ export async function getStoredPropertyById(id: string): Promise<Property | null
     if (doc) return fromMongoProperty(doc);
   }
   const store = await readStore();
-  return store.properties.find((property) => property.id === id) ?? null;
+  return store.properties.find((property) => property.id === id)
+    ?? seedProperties.find((property) => property.id === id)
+    ?? null;
 }
 
 export async function createProperty(input: PropertyInput): Promise<Property> {
