@@ -5,10 +5,12 @@ import { Search } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+type PriceLabel = (typeof PRICE_RANGES)[number]["label"];
+
 export function HeroSearch() {
   const router = useRouter();
   const [q, setQ] = useState("");
-  const [price, setPrice] = useState(PRICE_RANGES[0].label);
+  const [price, setPrice] = useState<PriceLabel>(PRICE_RANGES[0].label);
   const [type, setType] = useState("");
 
   function onSubmit(event: React.FormEvent) {
@@ -40,7 +42,10 @@ export function HeroSearch() {
         <span className="text-[11px] uppercase tracking-[0.18em] text-muted">Price range</span>
         <select
           value={price}
-          onChange={(event) => setPrice(event.target.value)}
+          onChange={(event) => {
+            const next = PRICE_RANGES.find((range) => range.label === event.target.value);
+            if (next) setPrice(next.label);
+          }}
           className="mt-1 w-full bg-transparent text-ink outline-none"
         >
           {PRICE_RANGES.map((range) => (

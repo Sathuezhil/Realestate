@@ -126,12 +126,12 @@ export async function listProperties(filters: PropertyFilters = {}): Promise<Pro
       }
       if (filters.furnished != null) query.furnished = filters.furnished;
 
-      const sort =
+      const sort: Record<string, 1 | -1> =
         filters.sort === "price-asc"
-          ? { price: 1 as const }
+          ? { price: 1 }
           : filters.sort === "price-desc"
-            ? { price: -1 as const }
-            : { createdAt: -1 as const };
+            ? { price: -1 }
+            : { createdAt: -1 };
 
       const docs = await PropertyModel.find(query).sort(sort).lean();
       return docs.map(fromMongoDoc);
