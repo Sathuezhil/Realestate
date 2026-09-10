@@ -160,38 +160,42 @@ function fromMongoProperty(doc: {
   };
 }
 
+function optionalString(value?: string | null) {
+  return value ?? undefined;
+}
+
 function fromMongoEnquiry(doc: {
   _id: { toString(): string };
-  propertyId?: string;
+  propertyId?: string | null;
   name: string;
   email: string;
   phone: string;
   message: string;
   source: Enquiry["source"];
-  status?: EnquiryStatus;
-  viewingAt?: string;
-  viewingType?: Enquiry["viewingType"];
-  community?: string;
-  budget?: string;
-  bedrooms?: string;
-  timeline?: string;
+  status?: EnquiryStatus | null;
+  viewingAt?: string | null;
+  viewingType?: Enquiry["viewingType"] | null;
+  community?: string | null;
+  budget?: string | null;
+  bedrooms?: string | null;
+  timeline?: string | null;
   createdAt: Date;
 }): Enquiry {
   return {
     id: doc._id.toString(),
-    propertyId: doc.propertyId,
+    propertyId: optionalString(doc.propertyId),
     name: doc.name,
     email: doc.email,
     phone: doc.phone,
     message: doc.message,
     source: doc.source,
     status: doc.status ?? "new",
-    viewingAt: doc.viewingAt,
-    viewingType: doc.viewingType,
-    community: doc.community,
-    budget: doc.budget,
-    bedrooms: doc.bedrooms,
-    timeline: doc.timeline,
+    viewingAt: optionalString(doc.viewingAt),
+    viewingType: doc.viewingType ?? undefined,
+    community: optionalString(doc.community),
+    budget: optionalString(doc.budget),
+    bedrooms: optionalString(doc.bedrooms),
+    timeline: optionalString(doc.timeline),
     createdAt: doc.createdAt.toISOString(),
   };
 }
