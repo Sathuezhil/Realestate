@@ -23,6 +23,10 @@ export const metadata: Metadata = {
   },
   description:
     "Private Dubai homes — Palm Jumeirah, Downtown, Marina, and gated communities. Book a viewing today.",
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export const viewport: Viewport = {

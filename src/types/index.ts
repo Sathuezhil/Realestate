@@ -56,6 +56,8 @@ export interface AuthUser {
 }
 
 export type EnquiryStatus = "new" | "contacted" | "closed";
+export type ViewingType = "in-person" | "video";
+export type EnquirySource = "property" | "contact" | "intake";
 
 export interface Enquiry {
   id: string;
@@ -64,8 +66,14 @@ export interface Enquiry {
   email: string;
   phone: string;
   message: string;
-  source: "property" | "contact";
+  source: EnquirySource;
   status: EnquiryStatus;
+  viewingAt?: string;
+  viewingType?: ViewingType;
+  community?: string;
+  budget?: string;
+  bedrooms?: string;
+  timeline?: string;
   createdAt: string;
 }
 

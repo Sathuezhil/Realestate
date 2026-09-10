@@ -1,5 +1,6 @@
 "use client";
 
+import { formatViewingAt } from "@/lib/utils";
 import { type Enquiry, type EnquiryStatus } from "@/types";
 import { MessageCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -11,8 +12,20 @@ const columns: { status: EnquiryStatus; label: string; hint: string }[] = [
   { status: "closed", label: "Completed", hint: "Tour done or dropped" },
 ];
 
-function waLink(phone: string) {
-  return `https://wa.me/${phone.replace(/\D/g, "")}`;
+function waLink(phone: string, name: string, title: string, viewingAt?: string) {
+  const slot = formatViewingAt(viewingAt);
+  const text = slot
+    ? `Hello ${name} — confirming your Aurelia viewing of "${title}" on ${slot} (Dubai time).`
+    : `Hello ${name} — following up on your Aurelia viewing request for "${title}".`;
+  return `https://wa.me/${phone.replace(/\D/g, "")}?text=${encodeURIComponent(text)}`;
+}
+
+function sortViewings(items: Enquiry[]) {
+  return [...items].sort((a, b) => {
+    const aTime = a.viewingAt ? new Date(a.viewingAt).getTime() : Number.POSITIVE_INFINITY;
+    const bTime = b.viewingAt ? new Date(b.viewingAt).getTime() : Number.POSITIVE_INFINITY;
+    return aTime - bTime;
+  });
 }
 
 export function ViewingsBoard({
@@ -48,7 +61,7 @@ export function ViewingsBoard({
   return (
     <div className="grid gap-4 lg:grid-cols-3">
       {columns.map((column) => {
-        const items = enquiries.filter((item) => item.status === column.status);
+        const items = sortViewings(enquiries.filter((item) => item.status === column.status));
         return (
           <section key={column.status} className="rounded-2xl border border-line bg-white p-4">
             <div className="mb-4 flex items-baseline justify-between px-1">
@@ -64,40 +77,49 @@ export function ViewingsBoard({
                   Empty
                 </p>
               ) : (
-                items.map((item) => (
-                  <article key={item.id} className="rounded-xl border border-line bg-ivory/60 p-4">
-                    <p className="font-medium text-ink">{item.name}</p>
-                    <p className="mt-1 text-xs text-muted">
-                      {titles[item.propertyId ?? ""] || "Listing request"}
-                    </p>
-                    <p className="mt-2 line-clamp-2 text-sm text-ink-soft">{item.message}</p>
-                    <p className="mt-2 text-[11px] uppercase tracking-[0.12em] text-muted">
-                      {new Date(item.createdAt).toLocaleString("en-AE")}
-                    </p>
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      <a
-                        href={waLink(item.phone)}
-                        className="inline-flex items-center gap-1 rounded-full bg-[#25D366] px-3 py-1.5 text-[11px] font-medium text-white"
-                      >
-                        <MessageCircle className="h-3 w-3" />
-                        WhatsApp
-                      </a>
-                      {columns
-                        .filter((next) => next.status !== item.status)
-                        .map((next) => (
-                          <button
-                            key={next.status}
-                            type="button"
-                            disabled={busy === item.id}
-                            onClick={() => void setStatus(item.id, next.status)}
-                            className="rounded-full border border-line bg-white px-2.5 py-1.5 text-[11px] capitalize disabled:opacity-50"
-                          >
-                            {next.label}
-                          </button>
-                        ))}
-                    </div>
-                  </article>
-                ))
+                items.map((item) => {
+                  const title = titles[item.propertyId ?? ""] || "Listing request";
+                  const slot = formatViewingAt(item.viewingAt);
+                  return (
+                    <article key={item.id} className="rounded-xl border border-line bg-ivory/60 p-4">
+                      {slot ? <p className="font-serif text-lg text-ink">{slot}</p> : null}
+                      <p className={`${slot ? "mt-1" : ""} font-medium text-ink`}>{item.name}</p>
+                      <p className="mt-1 text-xs text-muted">
+                        {item.viewingType === "video"
+                          ? "Video tour · "
+                          : item.viewingType === "in-person"
+                            ? "In person · "
+                            : ""}
+                        {title}
+                      </p>
+                      {item.message ? (
+                        <p className="mt-2 line-clamp-2 text-sm text-ink-soft">{item.message}</p>
+                      ) : null}
+                      <div className="mt-3 flex flex-wrap gap-1.5">
+                        <a
+                          href={waLink(item.phone, item.name, title, item.viewingAt)}
+                          className="inline-flex items-center gap-1 rounded-full bg-[#25D366] px-3 py-1.5 text-[11px] font-medium text-white"
+                        >
+                          <MessageCircle className="h-3 w-3" />
+                          WhatsApp
+                        </a>
+                        {columns
+                          .filter((next) => next.status !== item.status)
+                          .map((next) => (
+                            <button
+                              key={next.status}
+                              type="button"
+                              disabled={busy === item.id}
+                              onClick={() => void setStatus(item.id, next.status)}
+                              className="rounded-full border border-line bg-white px-2.5 py-1.5 text-[11px] capitalize disabled:opacity-50"
+                            >
+                              {next.label}
+                            </button>
+                          ))}
+                      </div>
+                    </article>
+                  );
+                })
               )}
             </div>
           </section>

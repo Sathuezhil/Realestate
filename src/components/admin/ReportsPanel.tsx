@@ -61,7 +61,9 @@ export function ReportsPanel({
       <BarGroup
         title="Lead source"
         rows={tally(
-          enquiries.map((item) => (item.source === "property" ? "Listing viewing" : "Contact form")),
+          enquiries.map((item) =>
+            item.source === "property" ? "Listing viewing" : item.source === "intake" ? "Buyer brief" : "Contact form",
+          ),
         )}
       />
     </div>

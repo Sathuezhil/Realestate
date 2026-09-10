@@ -1,5 +1,6 @@
 "use client";
 
+import { BrandLogo } from "@/components/layout/BrandLogo";
 import { useAuth } from "@/components/providers/AuthProvider";
 import { cn } from "@/lib/utils";
 import {
@@ -41,7 +42,7 @@ function pageMeta(pathname: string) {
     return { title: "Viewings", eyebrow: "Diary", copy: "Private viewings requested on listings." };
   }
   if (pathname.startsWith("/admin/buyers")) {
-    return { title: "Buyers", eyebrow: "Clients", copy: "Registered accounts and saved homes." };
+    return { title: "Buyers", eyebrow: "Clients", copy: "Intake briefs and registered accounts." };
   }
   if (pathname.startsWith("/admin/reports")) {
     return { title: "Reports", eyebrow: "Studio", copy: "How the collection and leads are sitting today." };
@@ -79,9 +80,10 @@ export function AdminShell({
   return (
     <div className="admin-app flex min-h-0 flex-1 text-ivory">
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-white/10 bg-gradient-to-b from-[#241f1b] to-ink md:flex">
-        <div className="px-6 py-7">
-          <p className="font-serif text-[1.65rem] tracking-tight">Aurelia</p>
-          <p className="mt-1 text-[10px] uppercase tracking-[0.28em] text-gold">Private studio</p>
+        <div className="px-5 py-6">
+          <Link href="/admin" className="block" aria-label="Aurelia studio">
+            <BrandLogo size="md" />
+          </Link>
         </div>
         <nav className="flex flex-col gap-1 px-3">
           {links.map((link) => {

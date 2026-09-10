@@ -1,20 +1,21 @@
 "use client";
 
+import { FALLBACK_IMAGE, SmartImage } from "@/components/media/SmartImage";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import Image from "next/image";
 import { useState } from "react";
 
 export function ImageGallery({ images, title }: { images: string[]; title: string }) {
   const [index, setIndex] = useState(0);
   const [open, setOpen] = useState(false);
 
-  const current = images[index] ?? images[0];
+  const gallery = images.length > 0 ? images : [FALLBACK_IMAGE];
+  const current = gallery[index] ?? gallery[0];
 
   function prev() {
-    setIndex((value) => (value === 0 ? images.length - 1 : value - 1));
+    setIndex((value) => (value === 0 ? gallery.length - 1 : value - 1));
   }
   function next() {
-    setIndex((value) => (value === images.length - 1 ? 0 : value + 1));
+    setIndex((value) => (value === gallery.length - 1 ? 0 : value + 1));
   }
 
   return (
@@ -24,7 +25,7 @@ export function ImageGallery({ images, title }: { images: string[]; title: strin
         onClick={() => setOpen(true)}
         className="gallery-main relative block aspect-[16/10] w-full overflow-hidden rounded-2xl"
       >
-        <Image
+        <SmartImage
           key={current}
           src={current}
           alt={title}
@@ -35,16 +36,16 @@ export function ImageGallery({ images, title }: { images: string[]; title: strin
         />
       </button>
       <div className="mt-3 grid grid-cols-4 gap-3">
-        {images.map((image, imageIndex) => (
+        {gallery.map((image, imageIndex) => (
           <button
-            key={image}
+            key={`${image}-${imageIndex}`}
             type="button"
             onClick={() => setIndex(imageIndex)}
-            className={`relative aspect-[4/3] overflow-hidden rounded-xl transition duration-300 ${
+            className={`relative aspect-[4/3] overflow-hidden rounded-xl bg-ivory-dark transition duration-300 ${
               imageIndex === index ? "ring-2 ring-gold scale-[1.02]" : "opacity-70 hover:opacity-100"
             }`}
           >
-            <Image src={image} alt="" fill className="object-cover" sizes="20vw" />
+            <SmartImage src={image} alt={`${title} ${imageIndex + 1}`} fill className="object-cover" sizes="25vw" />
           </button>
         ))}
       </div>
@@ -63,7 +64,7 @@ export function ImageGallery({ images, title }: { images: string[]; title: strin
             <ChevronLeft className="h-8 w-8" />
           </button>
           <div className="relative h-[80vh] w-full max-w-5xl">
-            <Image key={current} src={current} alt={title} fill className="object-contain" sizes="100vw" />
+            <SmartImage key={current} src={current} alt={title} fill className="object-contain" sizes="100vw" />
           </div>
           <button type="button" onClick={next} className="absolute right-4 text-white" aria-label="Next">
             <ChevronRight className="h-8 w-8" />

@@ -1,6 +1,7 @@
 import { featuredPropertyIds, seedProperties } from "@/data/properties";
 import { connectDB, isMongoReady } from "@/lib/db";
 import { PropertyModel } from "@/models/Property";
+import { rankSimilar } from "@/lib/similar";
 import {
   getStoredPropertyById,
   listStoredProperties,
@@ -192,7 +193,21 @@ export async function getFeaturedProperties(): Promise<Property[]> {
 }
 
 export async function getPropertiesByIds(ids: string[]): Promise<Property[]> {
-  const unique = [...new Set(ids)];
+  const unique = [...new Set(ids.filter(Boolean))];
   const results = await Promise.all(unique.map((id) => getPropertyById(id)));
-  return results.filter((property): property is Property => Boolean(property));
+  const byId = new Map(
+    results.filter((property): property is Property => Boolean(property)).map((property) => [property.id, property]),
+  );
+  return unique.map((id) => byId.get(id)).filter((property): property is Property => Boolean(property));
+}
+
+export async function getSimilarProperties(property: Property, limit = 3): Promise<Property[]> {
+  const pool = await listProperties({});
+  return rankSimilar(property, pool, limit);
+}
+
+export async function getPropertiesByCommunity(area: string): Promise<Property[]> {
+  const all = await listProperties({});
+  const needle = area.toLowerCase();
+  return all.filter((property) => property.location.area.toLowerCase() === needle);
 }

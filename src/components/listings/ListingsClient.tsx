@@ -2,6 +2,7 @@
 
 import { FilterSidebar, SortSelect } from "@/components/listings/FilterSidebar";
 import { PropertyCard } from "@/components/listings/PropertyCard";
+import { RecentlyViewed } from "@/components/listings/RecentlyViewed";
 import { ListingsMap } from "@/components/maps/MapLoaders";
 import { Reveal } from "@/components/motion/Reveal";
 import { useDebounce } from "@/hooks/useDebounce";
@@ -90,6 +91,8 @@ export function ListingsClient() {
           search.
         </p>
       </Reveal>
+
+      <RecentlyViewed embedded />
 
       <div className="grid gap-8 lg:grid-cols-[280px_1fr]">
         <FilterSidebar

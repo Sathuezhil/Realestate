@@ -1,6 +1,7 @@
 "use client";
 
-import { formatPrice } from "@/lib/utils";
+import { formatIntakeSummary } from "@/lib/intake";
+import { formatPrice, formatViewingAt } from "@/lib/utils";
 import { type Enquiry, type Property } from "@/types";
 import { BarChart3, Building2, CalendarDays, Heart, Home, Inbox, MessageCircle, Settings, Users } from "lucide-react";
 import Link from "next/link";
@@ -81,6 +82,11 @@ export function DashboardClient({
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <p className="font-medium">{item.name}</p>
+                      {item.viewingAt ? (
+                        <p className="mt-1 text-sm text-gold-hover">{formatViewingAt(item.viewingAt)}</p>
+                      ) : item.source === "intake" ? (
+                        <p className="mt-1 text-sm text-gold-hover">{formatIntakeSummary(item)}</p>
+                      ) : null}
                       <p className="mt-1 line-clamp-2 text-sm text-ink-soft">{item.message}</p>
                     </div>
                     <span className={`admin-status admin-status-${item.status}`}>{item.status}</span>

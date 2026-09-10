@@ -59,7 +59,7 @@ export const seedProperties: Property[] = [
       img("photo-1545324418-cc1a3fa10c00"),
       img("photo-1502672260266-1c1ef2d93688"),
       img("photo-1560448204-e02f11c3d0e2"),
-      img("photo-1600607687920-4e2a09cf159d"),
+      img("photo-1600607687939-ce8a6c25118c"),
     ],
     amenities: ["Parking", "Gym", "Pool", "Concierge", "Burj view", "Maid's room"],
     status: "available",
@@ -90,9 +90,9 @@ export const seedProperties: Property[] = [
     },
     images: [
       img("photo-1522708323590-d24dbb6b0267"),
-      img("photo-1560185127-6a33939ba3e0"),
+      img("photo-1600566753190-17f0baa2a6c3"),
       img("photo-1556912173-3bb406ef7e77"),
-      img("photo-1560185127-c37e0aa0cc6d"),
+      img("photo-1600573472592-401b489a3cdc"),
     ],
     amenities: ["Parking", "Pool", "Gym", "Marina view", "Security"],
     status: "available",
@@ -124,7 +124,7 @@ export const seedProperties: Property[] = [
     images: [
       img("photo-1600596542815-ffad4c1539a9"),
       img("photo-1600566753190-17f0baa2a6c3"),
-      img("photo-1600047509807-ba8b31be01b2"),
+      img("photo-1600607687939-ce8a6c25118c"),
       img("photo-1600573472592-401b489a3cdc"),
     ],
     amenities: ["Parking", "Pool", "Golf view", "Garden", "Maid's room", "Gated community"],
@@ -157,7 +157,7 @@ export const seedProperties: Property[] = [
     images: [
       img("photo-1502672023488-70e25813eb80"),
       img("photo-1493809842364-78817add7ffb"),
-      img("photo-1554995207-c18c203606cb"),
+      img("photo-1502672260266-1c1ef2d93688"),
       img("photo-1560448204-603b3fc33ddc"),
     ],
     amenities: ["Parking", "Pool", "Gym", "Beach access", "Sea view", "Security"],
@@ -190,7 +190,7 @@ export const seedProperties: Property[] = [
     images: [
       img("photo-1560448204-603b3fc33ddc"),
       img("photo-1615874959474-d609969a20ed"),
-      img("photo-1554995207-c18c203606cb"),
+      img("photo-1560448204-e02f11c3d0e2"),
       img("photo-1493809842364-78817add7ffb"),
     ],
     amenities: ["Parking", "Pool", "Gym", "Balcony", "Community retail", "Security"],
@@ -222,7 +222,7 @@ export const seedProperties: Property[] = [
     },
     images: [
       img("photo-1512917774080-9991f1c4c750"),
-      img("photo-1600607687920-4e2a09cf159d"),
+      img("photo-1600607687939-ce8a6c25118c"),
       img("photo-1574362848149-11496d93a7c7"),
       img("photo-1600585154526-990dced4db0d"),
     ],
@@ -256,7 +256,7 @@ export const seedProperties: Property[] = [
     images: [
       img("photo-1600585154526-990dced4db0d"),
       img("photo-1600210492486-724fe5c67fb0"),
-      img("photo-1600047509807-ba8b31be01b2"),
+      img("photo-1600566753190-17f0baa2a6c3"),
       img("photo-1600596542815-ffad4c1539a9"),
     ],
     amenities: ["Parking", "Pool", "Private beach", "Cinema", "Gym", "Staff quarters", "Security"],
@@ -321,7 +321,7 @@ export const seedProperties: Property[] = [
     },
     images: [
       img("photo-1605276374104-dee2a0ed3cd6"),
-      img("photo-1598928506311-c55ded91a20c"),
+      img("photo-1600573472592-401b489a3cdc"),
       img("photo-1600585154340-be6161a56a0c"),
       img("photo-1600566753190-17f0baa2a6c3"),
     ],
@@ -356,7 +356,7 @@ export const seedProperties: Property[] = [
       img("photo-1560448204-e02f11c3d0e2"),
       img("photo-1522708323590-d24dbb6b0267"),
       img("photo-1556911220-bff31c812dba"),
-      img("photo-1560185127-6a33939ba3e0"),
+      img("photo-1556912173-3bb406ef7e77"),
     ],
     amenities: ["Parking", "Pool", "Gym", "Canal view", "Lift", "Security"],
     status: "available",
@@ -387,7 +387,7 @@ export const seedProperties: Property[] = [
     },
     images: [
       img("photo-1556761175-5973dc0f32e7"),
-      img("photo-1497366754035-1c4baba81ce8"),
+      img("photo-1497366811353-6870744d04b2"),
       img("photo-1497215728101-856f4ea42174"),
       img("photo-1524758631624-e2822e304c36"),
     ],
@@ -420,7 +420,7 @@ export const seedProperties: Property[] = [
     },
     images: [
       img("photo-1522708323590-d24dbb6b0267"),
-      img("photo-1616486338812-3dadae4b4ace"),
+      img("photo-1560448204-e02f11c3d0e2"),
       img("photo-1586023492125-27b2c045efd7"),
       img("photo-1502672260266-1c1ef2d93688"),
     ],

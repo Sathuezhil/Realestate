@@ -1,3 +1,4 @@
+import { formatMoney } from "@/lib/currency";
 import { type PropertyFilters, type PropertyType, type SortOption } from "@/types";
 
 export function cn(...classes: Array<string | false | null | undefined>) {
@@ -5,11 +6,7 @@ export function cn(...classes: Array<string | false | null | undefined>) {
 }
 
 export function formatPrice(price: number) {
-  if (price >= 1_000_000) {
-    const millions = price / 1_000_000;
-    return `AED ${millions % 1 === 0 ? millions.toFixed(0) : millions.toFixed(2)}M`;
-  }
-  return `AED ${price.toLocaleString("en-AE")}`;
+  return formatMoney(price, "AED");
 }
 
 export function formatNumber(value: number) {
@@ -81,6 +78,57 @@ export function filtersToSearchParams(filters: PropertyFilters, extra?: Record<s
     }
   }
   return params;
+}
+
+export const VIEWING_TIMES = ["10:00", "11:30", "13:00", "15:00", "16:30", "18:00"] as const;
+
+export function viewingAtIso(date: string, time: string) {
+  return `${date}T${time}:00+04:00`;
+}
+
+export function formatViewingAt(iso?: string) {
+  if (!iso) return "";
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return "";
+  return date.toLocaleString("en-AE", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZone: "Asia/Dubai",
+  });
+}
+
+export function dubaiYmd(offsetDays = 0) {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Dubai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+  const [year, month, day] = parts.split("-").map(Number);
+  const next = new Date(Date.UTC(year, month - 1, day + offsetDays));
+  return next.toISOString().slice(0, 10);
+}
+
+export function viewingDayParts(ymd: string) {
+  const date = new Date(`${ymd}T12:00:00+04:00`);
+  const top =
+    ymd === dubaiYmd() ? "Today" : ymd === dubaiYmd(1) ? "Tomorrow" : date.toLocaleDateString("en-AE", {
+      weekday: "short",
+      timeZone: "Asia/Dubai",
+    });
+  const bottom = date.toLocaleDateString("en-AE", {
+    day: "numeric",
+    month: "short",
+    timeZone: "Asia/Dubai",
+  });
+  return { top, bottom };
+}
+
+export function isViewingSlotOpen(date: string, time: string) {
+  return new Date(viewingAtIso(date, time)).getTime() > Date.now() + 30 * 60 * 1000;
 }
 
 export const PRICE_RANGES = [

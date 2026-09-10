@@ -1,5 +1,6 @@
 "use client";
 
+import { formatViewingAt } from "@/lib/utils";
 import { type Enquiry, type EnquiryStatus } from "@/types";
 import { MessageCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -59,9 +60,11 @@ export function EnquiriesTable({
           <p className="mt-3 text-xs uppercase tracking-[0.12em] text-muted">
             {item.source === "property"
               ? titles[item.propertyId ?? ""] || `Listing ${item.propertyId ?? ""}`
-              : "Contact form"}{" "}
-            ·{" "}
-            {new Date(item.createdAt).toLocaleString("en-AE")}
+              : item.source === "intake"
+                ? `Buyer brief${item.community ? ` · ${item.community}` : ""}`
+                : "Contact form"}
+            {item.viewingAt ? ` · ${formatViewingAt(item.viewingAt)} Dubai` : ""}{" "}
+            · {new Date(item.createdAt).toLocaleString("en-AE")}
           </p>
           <div className="mt-5 flex flex-wrap gap-2">
             <a

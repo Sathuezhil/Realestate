@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 
 export const metadata: Metadata = { title: "Studio" };
 
+export const dynamic = "force-dynamic";
+
 export const viewport: Viewport = {
   colorScheme: "light",
   themeColor: "#f6f1e8",

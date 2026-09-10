@@ -1,10 +1,13 @@
 "use client";
 
+import { CurrencySwitch } from "@/components/currency/CurrencySwitch";
+import { BrandLogo } from "@/components/layout/BrandLogo";
 import { useAuth } from "@/components/providers/AuthProvider";
+import { useBrowse } from "@/components/providers/BrowseProvider";
 import { useTheme } from "@/components/providers/ThemeProvider";
 import { cn } from "@/lib/utils";
 import { whatsappHref } from "@/lib/contact";
-import { Heart, Menu, MessageCircle, Moon, Sun, UserRound, X } from "lucide-react";
+import { Heart, Menu, MessageCircle, Moon, Sun, UserRound, X, Columns2 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -12,6 +15,7 @@ import { useEffect, useState } from "react";
 const links = [
   { href: "/", label: "Home" },
   { href: "/listings", label: "Listings" },
+  { href: "/communities", label: "Communities" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
@@ -19,6 +23,7 @@ const links = [
 export function Header() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const { compareIds, ready } = useBrowse();
   const { theme, toggleTheme } = useTheme();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -39,8 +44,8 @@ export function Header() {
         )}
       />
       <div className="relative mx-auto flex min-h-[4.25rem] max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
-        <Link href="/" className="font-serif text-2xl tracking-tight text-ink transition hover:text-gold-hover">
-          Aurelia
+        <Link href="/" className="relative shrink-0" aria-label="Aurelia home">
+          <BrandLogo size="sm" />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">
@@ -50,7 +55,8 @@ export function Header() {
               href={link.href}
               className={cn(
                 "nav-link text-sm tracking-wide text-muted transition hover:text-ink",
-                pathname === link.href && "is-active text-ink",
+                (pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))) &&
+                  "is-active text-ink",
               )}
             >
               {link.label}
@@ -66,6 +72,7 @@ export function Header() {
             <MessageCircle className="h-3.5 w-3.5" />
             WhatsApp
           </a>
+          <CurrencySwitch />
           <button
             type="button"
             onClick={toggleTheme}
@@ -74,6 +81,18 @@ export function Header() {
           >
             {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
           </button>
+          <Link
+            href={compareIds.length >= 2 ? `/compare?ids=${compareIds.join(",")}` : "/compare"}
+            className="relative inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line text-ink transition hover:border-gold hover:text-gold-hover"
+            aria-label="Compare homes"
+          >
+            <Columns2 className="h-4 w-4" />
+            {ready && compareIds.length > 0 ? (
+              <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-gold px-1 text-[10px] text-ink">
+                {compareIds.length}
+              </span>
+            ) : null}
+          </Link>
           <Link
             href="/favorites"
             className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line text-ink transition hover:border-gold hover:text-gold-hover hover:scale-105"
@@ -139,6 +158,12 @@ export function Header() {
             <Link href="/favorites" onClick={() => setOpen(false)} className="text-sm text-ink">
               Favorites
             </Link>
+            <Link href="/compare" onClick={() => setOpen(false)} className="text-sm text-ink">
+              Compare homes
+            </Link>
+            <div className="py-1">
+              <CurrencySwitch />
+            </div>
             <a href={whatsappHref()} onClick={() => setOpen(false)} className="text-sm text-ink">
               WhatsApp a specialist
             </a>

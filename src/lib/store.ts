@@ -60,21 +60,48 @@ function normalizeEnquiry(enquiry: Enquiry): Enquiry {
   };
 }
 
-async function readStore(): Promise<LocalStore> {
-  if (memoryStore) return cloneStore(memoryStore);
+function mergeById<T extends { id: string }>(lists: T[][]): T[] {
+  const map = new Map<string, T>();
+  for (const list of lists) {
+    for (const item of list) {
+      const prev = map.get(item.id);
+      map.set(item.id, prev ? { ...prev, ...item } : item);
+    }
+  }
+  return [...map.values()];
+}
+
+async function readDiskStore(): Promise<LocalStore | null> {
   try {
     const raw = await fs.readFile(STORE_PATH, "utf8");
     const parsed = JSON.parse(raw) as Partial<LocalStore>;
-    const store: LocalStore = {
+    return {
       users: parsed.users ?? [],
       enquiries: (parsed.enquiries ?? []).map(normalizeEnquiry),
       properties: parsed.properties ?? [],
     };
-    memoryStore = cloneStore(store);
-    return store;
   } catch {
-    return emptyStore();
+    return null;
   }
+}
+
+async function readStore(): Promise<LocalStore> {
+  const disk = await readDiskStore();
+  if (disk && memoryStore) {
+    const merged: LocalStore = {
+      users: mergeById([disk.users, memoryStore.users]),
+      enquiries: mergeById([disk.enquiries, memoryStore.enquiries]),
+      properties: disk.properties.length ? disk.properties : memoryStore.properties,
+    };
+    memoryStore = cloneStore(merged);
+    return cloneStore(merged);
+  }
+  if (memoryStore) return cloneStore(memoryStore);
+  if (disk) {
+    memoryStore = cloneStore(disk);
+    return cloneStore(disk);
+  }
+  return emptyStore();
 }
 
 async function writeStore(store: LocalStore) {
@@ -142,6 +169,12 @@ function fromMongoEnquiry(doc: {
   message: string;
   source: Enquiry["source"];
   status?: EnquiryStatus;
+  viewingAt?: string;
+  viewingType?: Enquiry["viewingType"];
+  community?: string;
+  budget?: string;
+  bedrooms?: string;
+  timeline?: string;
   createdAt: Date;
 }): Enquiry {
   return {
@@ -153,6 +186,12 @@ function fromMongoEnquiry(doc: {
     message: doc.message,
     source: doc.source,
     status: doc.status ?? "new",
+    viewingAt: doc.viewingAt,
+    viewingType: doc.viewingType,
+    community: doc.community,
+    budget: doc.budget,
+    bedrooms: doc.bedrooms,
+    timeline: doc.timeline,
     createdAt: doc.createdAt.toISOString(),
   };
 }
@@ -336,16 +375,18 @@ export async function createEnquiry(input: Omit<Enquiry, "id" | "createdAt" | "s
     createdAt: new Date().toISOString(),
   };
 
+  await ensureSeed();
   await connectDB();
   if (isMongoReady()) {
-    const created = await EnquiryModel.create({
-      ...input,
-      status: enquiry.status,
-    });
-    return {
-      ...enquiry,
-      id: created._id.toString(),
-    };
+    try {
+      const created = await EnquiryModel.create({
+        ...input,
+        status: enquiry.status,
+      });
+      enquiry.id = created._id.toString();
+    } catch (error) {
+      console.error("Mongo enquiry create failed; using local store.", error);
+    }
   }
 
   const store = await readStore();
@@ -354,32 +395,48 @@ export async function createEnquiry(input: Omit<Enquiry, "id" | "createdAt" | "s
   return enquiry;
 }
 
-export async function listEnquiries(): Promise<Enquiry[]> {
-  await ensureSeed();
-  await connectDB();
-  if (isMongoReady()) {
-    const docs = await EnquiryModel.find().sort({ createdAt: -1 }).lean();
-    return docs.map(fromMongoEnquiry);
-  }
-  const store = await readStore();
-  return [...store.enquiries].sort(
+function mergeEnquiries(primary: Enquiry[], extra: Enquiry[]) {
+  const ids = new Set(primary.map((item) => item.id));
+  const more = extra.filter((item) => !ids.has(item.id));
+  return [...primary, ...more].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   );
 }
 
+export async function listEnquiries(): Promise<Enquiry[]> {
+  await ensureSeed();
+  await connectDB();
+  const store = await readStore();
+  if (isMongoReady()) {
+    try {
+      const docs = await EnquiryModel.find().sort({ createdAt: -1 }).lean();
+      return mergeEnquiries(docs.map(fromMongoEnquiry), store.enquiries);
+    } catch (error) {
+      console.error("Mongo enquiry list failed; using local store.", error);
+    }
+  }
+  return mergeEnquiries([], store.enquiries);
+}
+
 export async function updateEnquiryStatus(id: string, status: EnquiryStatus) {
   await connectDB();
-  if (isMongoReady()) {
-    const doc = await EnquiryModel.findByIdAndUpdate(id, { status }, { new: true }).lean();
-    if (!doc) return null;
-    return fromMongoEnquiry(doc);
+  let updated: Enquiry | null = null;
+  if (isMongoReady() && !id.startsWith("e_")) {
+    try {
+      const doc = await EnquiryModel.findByIdAndUpdate(id, { status }, { new: true }).lean();
+      if (doc) updated = fromMongoEnquiry(doc);
+    } catch (error) {
+      console.error("Mongo enquiry update failed; using local store.", error);
+    }
   }
   const store = await readStore();
   const enquiry = store.enquiries.find((item) => item.id === id);
-  if (!enquiry) return null;
-  enquiry.status = status;
-  await writeStore(store);
-  return enquiry;
+  if (enquiry) {
+    enquiry.status = status;
+    await writeStore(store);
+    updated = enquiry;
+  }
+  return updated;
 }
 
 export async function listStoredProperties(): Promise<Property[]> {

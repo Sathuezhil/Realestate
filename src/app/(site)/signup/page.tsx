@@ -1,5 +1,6 @@
 "use client";
 
+import { BrandLogo } from "@/components/layout/BrandLogo";
 import { useAuth } from "@/components/providers/AuthProvider";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -42,7 +43,10 @@ function SignupForm() {
         }}
       />
       <div className="mx-auto flex w-full max-w-md flex-col justify-center px-6 py-16">
-        <p className="text-xs uppercase tracking-[0.22em] text-gold-hover">Join Aurelia</p>
+        <Link href="/" aria-label="Aurelia home">
+          <BrandLogo size="md" />
+        </Link>
+        <p className="mt-8 text-xs uppercase tracking-[0.22em] text-gold-hover">Join Aurelia</p>
         <h1 className="mt-2 font-serif text-4xl text-ink">Create an account</h1>
         <p className="mt-3 text-sm text-muted">
           Already have one?{" "}

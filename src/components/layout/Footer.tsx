@@ -1,3 +1,4 @@
+import { BrandLogo } from "@/components/layout/BrandLogo";
 import { STUDIO, whatsappHref } from "@/lib/contact";
 import Link from "next/link";
 
@@ -6,7 +7,7 @@ export function Footer() {
     <footer className="mt-auto border-t border-line bg-ivory-dark text-ink">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-4 lg:px-8">
         <div className="md:col-span-2">
-          <p className="font-serif text-3xl">Aurelia</p>
+          <BrandLogo size="md" />
           <p className="mt-3 max-w-md text-sm leading-7 text-ink-soft">
             Private apartments, villas, and offices across Dubai. We arrange the viewing, the files,
             and the conversation with the other side.
@@ -22,6 +23,9 @@ export function Footer() {
           <p className="text-xs uppercase tracking-[0.2em] text-gold-hover">Explore</p>
           <div className="mt-4 flex flex-col gap-2 text-sm text-ink-soft">
             <Link href="/listings">All listings</Link>
+            <Link href="/communities">Communities</Link>
+            <Link href="/mortgage">Mortgage calculator</Link>
+            <Link href="/compare">Compare homes</Link>
             <Link href="/listings?type=villa">Villas</Link>
             <Link href="/listings?type=apartment">Apartments</Link>
             <Link href="/listings?type=office">Offices</Link>

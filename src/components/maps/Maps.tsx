@@ -2,8 +2,8 @@
 
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import L from "leaflet";
+import { PriceText } from "@/components/currency/PriceText";
 import { type Property } from "@/types";
-import { formatPrice } from "@/lib/utils";
 import Link from "next/link";
 import "leaflet/dist/leaflet.css";
 
@@ -56,7 +56,9 @@ export function ListingsMap({ properties }: { properties: Property[] }) {
           <Popup>
             <div className="min-w-[160px]">
               <p className="font-medium">{property.title}</p>
-              <p className="text-sm">{formatPrice(property.price)}</p>
+              <p className="text-sm">
+                <PriceText aed={property.price} />
+              </p>
               <Link href={`/listings/${property.id}`} className="text-sm underline">
                 View details
               </Link>

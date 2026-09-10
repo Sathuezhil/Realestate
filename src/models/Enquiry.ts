@@ -7,11 +7,20 @@ const EnquirySchema = new Schema(
     email: { type: String, required: true },
     phone: { type: String, required: true },
     message: { type: String, required: true },
-    source: { type: String, enum: ["property", "contact"], default: "property" },
+    source: { type: String, enum: ["property", "contact", "intake"], default: "property" },
     status: { type: String, enum: ["new", "contacted", "closed"], default: "new" },
+    viewingAt: { type: String },
+    viewingType: { type: String, enum: ["in-person", "video"] },
+    community: { type: String },
+    budget: { type: String },
+    bedrooms: { type: String },
+    timeline: { type: String },
   },
   { timestamps: true },
 );
 
-export const EnquiryModel =
-  mongoose.models.Enquiry || mongoose.model("Enquiry", EnquirySchema);
+if (mongoose.models.Enquiry) {
+  mongoose.deleteModel("Enquiry");
+}
+
+export const EnquiryModel = mongoose.model("Enquiry", EnquirySchema);

@@ -1,24 +1,17 @@
+import { RecentlyViewed } from "@/components/listings/RecentlyViewed";
 import { CountUp } from "@/components/home/CountUp";
 import { CommunityMarquee } from "@/components/home/CommunityMarquee";
 import { HomeHero } from "@/components/home/HomeHero";
+import { FeaturedSwipe } from "@/components/home/FeaturedSwipe";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import { LeadStrip } from "@/components/home/LeadStrip";
 import { Testimonials } from "@/components/home/Testimonials";
-import { PropertyCard } from "@/components/listings/PropertyCard";
 import { Reveal } from "@/components/motion/Reveal";
+import { COMMUNITIES } from "@/lib/communities";
 import { getFeaturedProperties } from "@/lib/properties";
 import { seedProperties } from "@/data/properties";
 import { ArrowRight, ShieldCheck } from "lucide-react";
 import Link from "next/link";
-
-const cities = [
-  "Palm Jumeirah",
-  "Downtown Dubai",
-  "Dubai Marina",
-  "Emirates Hills",
-  "Dubai Hills",
-  "Arabian Ranches",
-];
 
 export default async function HomePage() {
   let featured = seedProperties.filter((property) => property.status === "available").slice(0, 6);
@@ -50,25 +43,23 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <Reveal className="mb-10 flex items-end justify-between gap-4">
-          <div>
-            <p className="text-xs uppercase tracking-[0.22em] text-gold-hover">Private list</p>
-            <h2 className="mt-2 font-serif text-4xl text-ink">Homes clients ask for first</h2>
-            <p className="mt-2 max-w-xl text-sm text-ink-soft">
-              Beach, Burj views, and gated villas — tap through and book a viewing in one step.
-            </p>
-          </div>
-          <Link href="/listings" className="hidden items-center gap-2 text-sm text-ink md:inline-flex">
-            All listings <ArrowRight className="h-4 w-4" />
-          </Link>
-        </Reveal>
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {featured.map((property, index) => (
-            <Reveal key={property.id} delay={index * 80}>
-              <PropertyCard property={property} />
-            </Reveal>
-          ))}
+      <section className="py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <Reveal className="mb-10 flex items-end justify-between gap-4">
+            <div>
+              <p className="text-xs uppercase tracking-[0.22em] text-gold-hover">Private list</p>
+              <h2 className="mt-2 font-serif text-4xl text-ink">Homes clients ask for first</h2>
+              <p className="mt-2 max-w-xl text-sm text-ink-soft">
+                Beach, Burj views, and gated villas — a new home every two seconds. Tap a card to open it.
+              </p>
+            </div>
+            <Link href="/listings" className="hidden items-center gap-2 text-sm text-ink md:inline-flex">
+              All listings <ArrowRight className="h-4 w-4" />
+            </Link>
+          </Reveal>
+        </div>
+        <div>
+          <FeaturedSwipe properties={featured} />
         </div>
       </section>
 
@@ -81,21 +72,31 @@ export default async function HomePage() {
             <h2 className="mt-2 font-serif text-4xl text-ink">Where our clients actually live</h2>
           </Reveal>
           <div className="mt-8 flex flex-wrap gap-3">
-            {cities.map((city, index) => (
-              <Reveal key={city} delay={index * 50}>
+            {COMMUNITIES.filter((item) =>
+              ["palm-jumeirah", "downtown-dubai", "dubai-hills", "dubai-marina", "emirates-hills", "arabian-ranches"].includes(
+                item.slug,
+              ),
+            ).map((community, index) => (
+              <Reveal key={community.slug} delay={index * 50}>
                 <Link
-                  href={`/listings?q=${encodeURIComponent(city)}`}
+                  href={`/communities/${community.slug}`}
                   className="chip inline-block rounded-full border border-line bg-white px-5 py-2 text-sm text-ink"
                 >
-                  {city}
+                  {community.name}
                 </Link>
               </Reveal>
             ))}
+            <Reveal delay={350}>
+              <Link href="/communities" className="chip inline-block rounded-full border border-line bg-ink px-5 py-2 text-sm text-ivory">
+                All communities
+              </Link>
+            </Reveal>
           </div>
         </div>
       </section>
 
       <Testimonials />
+      <RecentlyViewed />
       <LeadStrip />
     </div>
   );

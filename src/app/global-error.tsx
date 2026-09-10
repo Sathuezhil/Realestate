@@ -5,7 +5,7 @@ export default function GlobalError({ reset }: { reset: () => void }) {
     <html lang="en">
       <body style={{ margin: 0, background: "#f6f1e8", color: "#1c1916", fontFamily: "Georgia, serif" }}>
         <div style={{ maxWidth: 560, margin: "0 auto", padding: "96px 24px", textAlign: "center" }}>
-          <p style={{ letterSpacing: "0.2em", textTransform: "uppercase", fontSize: 12 }}>Aurelia</p>
+          <img src="/logo.png" alt="Aurelia Realestate Dubai" style={{ height: 88, width: "auto", margin: "0 auto" }} />
           <h1 style={{ fontSize: 36, margin: "12px 0" }}>This page could not load</h1>
           <p style={{ color: "#6b655e" }}>A server error occurred. Reload to try again.</p>
           <button
