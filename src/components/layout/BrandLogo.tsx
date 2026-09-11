@@ -2,9 +2,9 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 const sizes = {
-  sm: "h-14 sm:h-16",
-  md: "h-[4.75rem]",
-  lg: "h-24",
+  sm: "h-[4.75rem] sm:h-24",
+  md: "h-32",
+  lg: "h-40",
 } as const;
 
 export function BrandLogo({
@@ -18,9 +18,9 @@ export function BrandLogo({
     <span className={cn("inline-flex items-center", className)}>
       <Image
         src="/logo.png"
-        alt="Aurelia Realestate Dubai"
-        width={1430}
-        height={1100}
+        alt="Aurelia Estates"
+        width={188}
+        height={150}
         className={cn("w-auto object-contain", sizes[size])}
         priority={size === "sm"}
         unoptimized

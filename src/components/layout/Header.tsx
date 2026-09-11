@@ -43,7 +43,7 @@ export function Header() {
           scrolled ? "border-line/90 shadow-[0_8px_30px_rgba(28,25,22,0.06)]" : "border-transparent",
         )}
       />
-      <div className="relative mx-auto flex min-h-[4.25rem] max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+      <div className="relative mx-auto flex min-h-[5.75rem] max-w-7xl items-center justify-between gap-4 px-4 py-2 sm:px-6 lg:px-8">
         <Link href="/" className="relative shrink-0" aria-label="Aurelia home">
           <BrandLogo size="sm" />
         </Link>
