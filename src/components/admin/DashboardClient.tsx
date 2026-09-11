@@ -1,9 +1,10 @@
 "use client";
 
+import { WhatsAppIcon } from "@/components/media/WhatsAppIcon";
 import { formatIntakeSummary } from "@/lib/intake";
 import { formatPrice, formatViewingAt } from "@/lib/utils";
 import { type Enquiry, type Property } from "@/types";
-import { BarChart3, Building2, CalendarDays, Heart, Home, Inbox, MessageCircle, Settings, Users } from "lucide-react";
+import { BarChart3, Building2, CalendarDays, Heart, Home, Inbox, Settings, Users } from "lucide-react";
 import Link from "next/link";
 
 export function DashboardClient({
@@ -95,7 +96,7 @@ export function DashboardClient({
                     href={`https://wa.me/${item.phone.replace(/\D/g, "")}`}
                     className="mt-2 inline-flex items-center gap-1 text-sm text-[#128C4A]"
                   >
-                    <MessageCircle className="h-3.5 w-3.5" />
+                    <WhatsAppIcon className="h-3.5 w-3.5" />
                     WhatsApp
                   </a>
                 </li>

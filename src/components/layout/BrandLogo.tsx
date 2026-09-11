@@ -2,9 +2,9 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 const sizes = {
-  sm: "h-[4.75rem] sm:h-24",
-  md: "h-32",
-  lg: "h-40",
+  sm: "h-14 w-auto max-w-[9.5rem] sm:h-[4.25rem] sm:max-w-none lg:h-[4.75rem] xl:h-24",
+  md: "h-20 w-auto sm:h-28 lg:h-32",
+  lg: "h-28 w-auto sm:h-36 lg:h-40",
 } as const;
 
 export function BrandLogo({

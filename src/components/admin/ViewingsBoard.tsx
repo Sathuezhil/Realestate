@@ -1,8 +1,8 @@
 "use client";
 
+import { WhatsAppIcon } from "@/components/media/WhatsAppIcon";
 import { formatViewingAt } from "@/lib/utils";
 import { type Enquiry, type EnquiryStatus } from "@/types";
-import { MessageCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -100,7 +100,7 @@ export function ViewingsBoard({
                           href={waLink(item.phone, item.name, title, item.viewingAt)}
                           className="inline-flex items-center gap-1 rounded-full bg-[#25D366] px-3 py-1.5 text-[11px] font-medium text-white"
                         >
-                          <MessageCircle className="h-3 w-3" />
+                          <WhatsAppIcon className="h-3 w-3" />
                           WhatsApp
                         </a>
                         {columns

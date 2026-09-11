@@ -1,11 +1,12 @@
 import { BrandLogo } from "@/components/layout/BrandLogo";
+import { WhatsAppIcon } from "@/components/media/WhatsAppIcon";
 import { STUDIO, whatsappHref } from "@/lib/contact";
 import Link from "next/link";
 
 export function Footer() {
   return (
     <footer className="mt-auto border-t border-line bg-ivory-dark text-ink">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 md:grid-cols-4 lg:px-8">
+      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-12 sm:px-6 sm:py-14 md:grid-cols-4 lg:px-8">
         <div className="md:col-span-2">
           <BrandLogo size="md" />
           <p className="mt-3 max-w-md text-sm leading-7 text-ink-soft">
@@ -14,8 +15,9 @@ export function Footer() {
           </p>
           <a
             href={whatsappHref()}
-            className="mt-5 inline-flex rounded-full bg-[#25D366] px-4 py-2 text-sm font-medium text-white"
+            className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-sm font-medium text-white"
           >
+            <WhatsAppIcon className="h-4 w-4" />
             WhatsApp the studio
           </a>
         </div>

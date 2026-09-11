@@ -1,6 +1,7 @@
 "use client";
 
 import { PriceText } from "@/components/currency/PriceText";
+import { WhatsAppIcon } from "@/components/media/WhatsAppIcon";
 import { whatsappHref } from "@/lib/contact";
 import { calculateMortgage, MORTGAGE_DEFAULTS } from "@/lib/mortgage";
 import { formatNumber } from "@/lib/utils";
@@ -94,7 +95,7 @@ export function MortgageCalculator({
 
       <div className="rounded-2xl border border-line bg-ivory p-5">
         <p className="text-[11px] uppercase tracking-[0.16em] text-gold-hover">Indicative monthly</p>
-        <p className="mt-2 font-serif text-4xl text-ink">
+        <p className="mt-2 font-serif text-3xl text-ink sm:text-4xl">
           <PriceText aed={result.monthly} />
         </p>
         <p className="mt-1 text-sm text-muted">per month · {result.months} payments</p>
@@ -110,8 +111,9 @@ export function MortgageCalculator({
         </p>
         <a
           href={wa}
-          className="mt-4 inline-flex rounded-full bg-[#25D366] px-4 py-2 text-sm font-medium text-white"
+          className="mt-4 inline-flex items-center gap-2 rounded-full bg-[#25D366] px-4 py-2 text-sm font-medium text-white"
         >
+          <WhatsAppIcon className="h-4 w-4" />
           WhatsApp a specialist
         </a>
       </div>

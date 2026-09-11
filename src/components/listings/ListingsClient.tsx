@@ -80,10 +80,10 @@ export function ListingsClient() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
       <Reveal className="mb-8">
         <p className="text-xs uppercase tracking-[0.22em] text-gold-hover">Search</p>
-        <h1 className="mt-2 font-serif text-4xl text-ink md:text-5xl">
+        <h1 className="mt-2 font-serif text-3xl text-ink sm:text-4xl md:text-5xl">
           Available <span className="gold-shimmer">listings</span>
         </h1>
         <p className="mt-3 max-w-2xl text-ink-soft">

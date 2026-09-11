@@ -21,11 +21,11 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section className="bg-white py-20">
+    <section className="bg-white py-12 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal>
           <p className="text-xs uppercase tracking-[0.22em] text-gold-hover">How it works</p>
-          <h2 className="mt-2 max-w-xl font-serif text-4xl text-ink">From first message to keys.</h2>
+          <h2 className="mt-2 max-w-xl font-serif text-3xl text-ink sm:text-4xl">From first message to keys.</h2>
         </Reveal>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {steps.map((step, index) => (

@@ -9,8 +9,8 @@ import {
   viewingAtIso,
   viewingDayParts,
 } from "@/lib/utils";
+import { WhatsAppIcon } from "@/components/media/WhatsAppIcon";
 import { type ViewingType } from "@/types";
-import { MessageCircle } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 const DAYS = 8;
@@ -154,7 +154,7 @@ export function EnquiryForm({
           </div>
           <div>
             <p className="mb-2 text-[11px] uppercase tracking-[0.16em] text-muted">Day</p>
-            <div className="flex gap-2 overflow-x-auto pb-1">
+            <div className="flex gap-2 overflow-x-auto overscroll-x-contain pb-1 [-webkit-overflow-scrolling:touch]">
               {days.map((ymd) => {
                 const { top, bottom } = viewingDayParts(ymd);
                 return (
@@ -232,7 +232,7 @@ export function EnquiryForm({
           )}
           className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#25D366] py-3 text-sm font-medium text-white"
         >
-          <MessageCircle className="h-4 w-4" />
+          <WhatsAppIcon className="h-4 w-4" />
           WhatsApp this listing
         </a>
       ) : null}

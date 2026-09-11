@@ -30,7 +30,7 @@ export default function FavoritesPage() {
   if (!user) {
     return (
       <div className="mx-auto max-w-xl px-4 py-24 text-center">
-        <h1 className="font-serif text-4xl text-ink">Save homes you love</h1>
+        <h1 className="font-serif text-3xl text-ink sm:text-4xl">Save homes you love</h1>
         <p className="mt-3 text-ink-soft">Sign in to bookmark listings and return to them later.</p>
         <div className="mt-6 flex justify-center gap-3">
           <Link href="/login?next=/favorites" className="rounded-full bg-ink px-5 py-2.5 text-sm text-ivory">
@@ -46,7 +46,7 @@ export default function FavoritesPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-      <h1 className="font-serif text-4xl text-ink">Your saved listings</h1>
+      <h1 className="font-serif text-3xl text-ink sm:text-4xl">Your saved listings</h1>
       <p className="mt-2 text-sm text-muted">Signed in as {user.email}</p>
       {fetching ? (
         <p className="mt-10 text-muted">Loading saved homes...</p>

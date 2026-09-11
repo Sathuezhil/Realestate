@@ -1,8 +1,8 @@
 "use client";
 
+import { WhatsAppIcon } from "@/components/media/WhatsAppIcon";
 import { formatIntakeSummary } from "@/lib/intake";
 import { type Enquiry, type EnquiryStatus } from "@/types";
-import { MessageCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -78,7 +78,7 @@ export function IntakeBoard({ intakes }: { intakes: Enquiry[] }) {
               href={waLink(item)}
               className="inline-flex items-center gap-1 rounded-full bg-[#25D366] px-4 py-2 text-xs font-medium text-white"
             >
-              <MessageCircle className="h-3.5 w-3.5" />
+              <WhatsAppIcon className="h-3.5 w-3.5" />
               WhatsApp shortlist
             </a>
             {(["new", "contacted", "closed"] as const).map((status) => (

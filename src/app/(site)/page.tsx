@@ -43,12 +43,12 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="py-20">
+      <section className="py-12 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal className="mb-10 flex items-end justify-between gap-4">
             <div>
               <p className="text-xs uppercase tracking-[0.22em] text-gold-hover">Private list</p>
-              <h2 className="mt-2 font-serif text-4xl text-ink">Homes clients ask for first</h2>
+              <h2 className="mt-2 font-serif text-3xl text-ink sm:text-4xl">Homes clients ask for first</h2>
               <p className="mt-2 max-w-xl text-sm text-ink-soft">
                 Beach, Burj views, and gated villas — a new home every two seconds. Tap a card to open it.
               </p>
@@ -65,11 +65,11 @@ export default async function HomePage() {
 
       <HowItWorks />
 
-      <section className="bg-ivory py-20">
+      <section className="bg-ivory py-12 sm:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <Reveal>
             <p className="text-xs uppercase tracking-[0.22em] text-gold-hover">Communities</p>
-            <h2 className="mt-2 font-serif text-4xl text-ink">Where our clients actually live</h2>
+            <h2 className="mt-2 font-serif text-3xl text-ink sm:text-4xl">Where our clients actually live</h2>
           </Reveal>
           <div className="mt-8 flex flex-wrap gap-3">
             {COMMUNITIES.filter((item) =>

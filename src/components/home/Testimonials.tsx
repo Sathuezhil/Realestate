@@ -23,11 +23,11 @@ const quotes = [
 
 export function Testimonials() {
   return (
-    <section className="py-20">
+    <section className="py-12 sm:py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <Reveal>
           <p className="text-xs uppercase tracking-[0.22em] text-gold-hover">Clients</p>
-          <h2 className="mt-2 font-serif text-4xl text-ink">What buyers tell us after the keys.</h2>
+          <h2 className="mt-2 font-serif text-3xl text-ink sm:text-4xl">What buyers tell us after the keys.</h2>
         </Reveal>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           {quotes.map((item, index) => (

@@ -39,21 +39,21 @@ export default async function PropertyDetailPage({
   const community = getCommunityByArea(property.location.area);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8">
       <ViewTracker propertyId={property.id} />
       <Reveal>
         <ImageGallery images={property.images} title={property.title} />
       </Reveal>
 
-      <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_360px]">
+      <div className="mt-10 grid min-w-0 gap-10 lg:grid-cols-[minmax(0,1fr)_360px]">
         <Reveal>
         <div>
           <div className="flex flex-wrap items-start justify-between gap-4">
-            <div>
+            <div className="min-w-0 max-w-full flex-1">
               <p className="text-xs uppercase tracking-[0.2em] text-gold-hover">
                 {propertyTypeLabel(property.propertyType)} · {statusLabel(property.status)}
               </p>
-              <h1 className="mt-2 font-serif text-4xl text-ink md:text-5xl">{property.title}</h1>
+              <h1 className="mt-2 font-serif text-3xl leading-tight text-ink sm:text-4xl md:text-5xl">{property.title}</h1>
               <p className="mt-3 text-ink-soft">
                 {community ? (
                   <Link href={`/communities/${community.slug}`} className="hover:underline">
@@ -64,8 +64,8 @@ export default async function PropertyDetailPage({
                 )}
               </p>
             </div>
-            <div className="text-right">
-              <p className="font-serif text-4xl text-ink">
+            <div className="w-full text-left sm:w-auto sm:text-right">
+              <p className="font-serif text-3xl text-ink sm:text-4xl">
                 <PriceText aed={property.price} />
               </p>
               <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-muted">Listed in AED</p>
@@ -75,14 +75,14 @@ export default async function PropertyDetailPage({
               >
                 Estimate monthly payment
               </Link>
-              <div className="mt-3 flex flex-wrap justify-end gap-2">
+              <div className="mt-3 flex flex-wrap justify-start gap-2 sm:justify-end">
                 <FavoriteButton propertyId={property.id} />
                 <CompareToggle propertyId={property.id} variant="label" />
               </div>
             </div>
           </div>
 
-          <div className="mt-8 flex flex-wrap gap-6 rounded-2xl border border-line bg-white px-6 py-5 text-sm">
+          <div className="mt-8 flex flex-wrap gap-4 rounded-2xl border border-line bg-white px-4 py-4 text-sm sm:gap-6 sm:px-6 sm:py-5">
             {property.bedrooms > 0 ? (
               <span className="inline-flex items-center gap-2">
                 <BedDouble className="h-4 w-4" /> {property.bedrooms} bedrooms
@@ -132,7 +132,7 @@ export default async function PropertyDetailPage({
             <PropertyMap property={property} />
           </div>
 
-          <div id="mortgage" className="mt-10 rounded-2xl border border-line bg-white p-6">
+          <div id="mortgage" className="mt-10 scroll-mt-28 rounded-2xl border border-line bg-white p-4 sm:p-6">
             <p className="text-xs uppercase tracking-[0.16em] text-gold-hover">Finance</p>
             <h2 className="mt-1 font-serif text-3xl text-ink">Monthly payment</h2>
             <p className="mt-1 mb-5 text-sm text-muted">
@@ -147,7 +147,7 @@ export default async function PropertyDetailPage({
         </Reveal>
 
         <Reveal delay={120}>
-        <aside className="h-fit rounded-2xl border border-line bg-white p-6 shadow-[0_16px_50px_rgba(28,25,22,0.06)] lg:sticky lg:top-24">
+        <aside className="h-fit rounded-2xl border border-line bg-white p-4 shadow-[0_16px_50px_rgba(28,25,22,0.06)] sm:p-6 lg:sticky lg:top-24">
           <p className="text-xs uppercase tracking-[0.16em] text-gold-hover">Private viewing</p>
           <h2 className="mt-1 font-serif text-2xl text-ink">Pick a day and time</h2>
           <p className="mt-1 mb-5 text-sm text-muted">

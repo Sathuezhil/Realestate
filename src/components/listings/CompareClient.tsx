@@ -65,7 +65,7 @@ export function CompareClient() {
   if (properties.length === 0) {
     return (
       <div className="mx-auto max-w-xl px-4 py-24 text-center">
-        <h1 className="font-serif text-4xl text-ink">Compare homes</h1>
+        <h1 className="font-serif text-3xl text-ink sm:text-4xl">Compare homes</h1>
         <p className="mt-3 text-ink-soft">Add 2 or 3 listings from the cards, then open this table.</p>
         <Link href="/listings" className="mt-6 inline-block rounded-full bg-ink px-5 py-2.5 text-sm text-ivory">
           Browse listings
@@ -79,7 +79,7 @@ export function CompareClient() {
       <p className="text-xs uppercase tracking-[0.22em] text-gold-hover">Side by side</p>
       <div className="mt-2 flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-serif text-4xl text-ink md:text-5xl">Compare {properties.length} homes</h1>
+          <h1 className="font-serif text-3xl text-ink sm:text-4xl md:text-5xl">Compare {properties.length} homes</h1>
           <p className="mt-2 text-sm text-ink-soft">Price, size, and amenity differences at a glance.</p>
         </div>
         <button

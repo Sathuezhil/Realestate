@@ -23,7 +23,7 @@ export function ImageGallery({ images, title }: { images: string[]; title: strin
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="gallery-main relative block aspect-[16/10] w-full overflow-hidden rounded-2xl"
+        className="gallery-main relative block aspect-[4/3] w-full overflow-hidden rounded-2xl sm:aspect-[16/10]"
       >
         <SmartImage
           key={current}
@@ -35,7 +35,7 @@ export function ImageGallery({ images, title }: { images: string[]; title: strin
           sizes="80vw"
         />
       </button>
-      <div className="mt-3 grid grid-cols-4 gap-3">
+      <div className="mt-3 grid grid-cols-4 gap-2 sm:gap-3">
         {gallery.map((image, imageIndex) => (
           <button
             key={`${image}-${imageIndex}`}

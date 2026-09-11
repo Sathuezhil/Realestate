@@ -78,7 +78,7 @@ export function PropertyCard({
             </button>
             <CompareToggle propertyId={property.id} />
           </div>
-          <div className="absolute inset-x-0 bottom-0 translate-y-3 bg-gradient-to-t from-black/85 to-transparent px-4 pb-4 pt-10 text-sm text-white opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 to-transparent px-4 pb-4 pt-10 text-sm text-white opacity-100 transition duration-300 md:translate-y-3 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100">
             Book a private viewing →
           </div>
         </div>
@@ -86,7 +86,7 @@ export function PropertyCard({
           <p className="font-serif text-2xl text-ink">
             <PriceText aed={property.price} />
           </p>
-          <h3 className="text-lg font-medium leading-snug text-ink">{property.title}</h3>
+          <h3 className="text-lg font-medium leading-snug text-ink break-words">{property.title}</h3>
           <p className="flex items-center gap-1.5 text-sm text-muted">
             <MapPin className="h-4 w-4" />
             {property.location.area}, {property.location.city}

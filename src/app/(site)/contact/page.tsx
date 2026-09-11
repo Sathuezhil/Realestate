@@ -7,9 +7,9 @@ export const metadata: Metadata = { title: "Contact" };
 
 export default function ContactPage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-16 lg:px-8">
       <p className="text-xs uppercase tracking-[0.22em] text-gold-hover">Contact</p>
-      <h1 className="mt-2 font-serif text-5xl text-ink">
+      <h1 className="mt-2 font-serif text-3xl text-ink sm:text-5xl">
         Talk to the <span className="gold-shimmer">studio</span>
       </h1>
       <p className="mt-4 max-w-xl text-ink-soft">

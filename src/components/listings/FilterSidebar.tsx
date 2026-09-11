@@ -2,6 +2,7 @@
 
 import { type PropertyFilters, type PropertyType, type SortOption } from "@/types";
 import { SlidersHorizontal } from "lucide-react";
+import { useState } from "react";
 
 interface FilterSidebarProps {
   filters: PropertyFilters;
@@ -19,19 +20,40 @@ const types: Array<{ value: "" | PropertyType; label: string }> = [
 ];
 
 export function FilterSidebar({ filters, qInput, onQInput, onChange, onReset }: FilterSidebarProps) {
+  const [open, setOpen] = useState(false);
+  const activeCount = [
+    filters.q,
+    filters.propertyType,
+    filters.minPrice,
+    filters.maxPrice,
+    filters.bedrooms,
+    filters.minArea,
+    filters.maxArea,
+    filters.furnished,
+  ].filter((value) => value !== undefined && value !== "").length;
+
   return (
     <aside className="filter-enter rounded-2xl border border-line bg-white p-5">
-      <div className="mb-5 flex items-center justify-between">
-        <p className="inline-flex items-center gap-2 text-sm font-medium text-ink">
+      <div className="mb-0 flex items-center justify-between lg:mb-5">
+        <button
+          type="button"
+          className="inline-flex items-center gap-2 text-sm font-medium text-ink lg:pointer-events-none"
+          onClick={() => setOpen((value) => !value)}
+          aria-expanded={open}
+        >
           <SlidersHorizontal className="h-4 w-4" />
           Filters
-        </p>
+          {activeCount > 0 ? (
+            <span className="rounded-full bg-ink px-2 py-0.5 text-[10px] text-ivory">{activeCount}</span>
+          ) : null}
+          <span className="text-xs font-normal text-muted lg:hidden">{open ? "Hide" : "Show"}</span>
+        </button>
         <button type="button" onClick={onReset} className="text-xs uppercase tracking-wide text-muted hover:text-ink">
           Reset
         </button>
       </div>
 
-      <div className="space-y-5">
+      <div className={`space-y-5 ${open ? "mt-5 block" : "hidden lg:mt-0 lg:block"}`}>
         <label className="block">
           <span className="mb-1.5 block text-[11px] uppercase tracking-[0.16em] text-muted">
             Location or keyword
@@ -175,7 +197,7 @@ export function SortSelect({
     <select
       value={value}
       onChange={(event) => onChange(event.target.value as SortOption)}
-      className="rounded-full border border-line bg-white px-3 py-2 text-sm text-ink outline-none"
+      className="max-w-full rounded-full border border-line bg-white px-3 py-2 text-sm text-ink outline-none"
     >
       <option value="newest">Newest first</option>
       <option value="price-asc">Price: low to high</option>

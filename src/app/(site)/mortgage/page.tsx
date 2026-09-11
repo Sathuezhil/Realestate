@@ -15,7 +15,7 @@ export default async function MortgagePage({
   return (
     <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8">
       <p className="text-xs uppercase tracking-[0.22em] text-gold-hover">Finance</p>
-      <h1 className="mt-2 font-serif text-4xl text-ink md:text-5xl">Monthly payment</h1>
+      <h1 className="mt-2 font-serif text-3xl text-ink sm:text-4xl md:text-5xl">Monthly payment</h1>
       <p className="mt-3 max-w-xl text-ink-soft">
         Price, down payment, rate, and term — an indicative Dubai mortgage. Banks set the final number.
       </p>

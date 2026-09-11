@@ -21,7 +21,7 @@ export default async function CommunitiesPage() {
     <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
       <Reveal>
         <p className="text-xs uppercase tracking-[0.22em] text-gold-hover">Dubai</p>
-        <h1 className="mt-2 font-serif text-4xl text-ink md:text-5xl">Communities</h1>
+        <h1 className="mt-2 font-serif text-3xl text-ink sm:text-4xl md:text-5xl">Communities</h1>
         <p className="mt-3 max-w-xl text-ink-soft">
           Palm, Downtown, Hills, Marina, and the gated streets we actually send people to.
         </p>

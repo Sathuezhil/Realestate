@@ -58,7 +58,7 @@ export default async function CommunityPage({
             <span className="mx-2 text-ivory/40">/</span>
             {community.short}
           </p>
-          <h1 className="mt-2 font-serif text-4xl text-ivory md:text-6xl">{community.name}</h1>
+          <h1 className="mt-2 font-serif text-3xl text-ivory sm:text-4xl md:text-6xl">{community.name}</h1>
           <p className="mt-3 max-w-2xl text-ivory/85">{community.tagline}</p>
         </div>
       </div>
